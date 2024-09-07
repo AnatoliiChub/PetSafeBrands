@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.chub.petsafebrands.Config.MAX_SELECTED_RATES
+import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
 import com.chub.petsafebrands.R
 import com.chub.petsafebrands.ui.view.BaseRateSelectionLayout
 import com.chub.petsafebrands.ui.view.CurrencyListItem

@@ -7,6 +7,7 @@ import com.chub.petsafebrands.data.FixerFxRatesRepository
 import com.chub.petsafebrands.data.FxRatesRepository
 import com.chub.petsafebrands.data.debug.FakeFxRatesRepository
 import com.chub.petsafebrands.data.debug.FakeResponseInterceptor
+import com.chub.petsafebrands.data.retrofit.FixerCallAdapterFactory
 import com.chub.petsafebrands.data.debug.JsonReader
 import com.chub.petsafebrands.data.debug.MockApiService
 import com.google.gson.Gson
@@ -43,9 +44,12 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideMockApiService(client: OkHttpClient): MockApiService {
+    fun provideMockApiService(client: OkHttpClient, callAdapterFactory: FixerCallAdapterFactory): MockApiService {
+        //just to avoid additional connection to fixer api since amount of available requests is limited
+        val url = if (BuildConfig.MOCK_API) "https://stackoverflow.com/" else BuildConfig.API_BASE_URL
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.API_BASE_URL)
+            .baseUrl(url)
+            .addCallAdapterFactory(callAdapterFactory)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

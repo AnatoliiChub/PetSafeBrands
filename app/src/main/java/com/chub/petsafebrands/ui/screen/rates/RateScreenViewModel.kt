@@ -2,9 +2,9 @@ package com.chub.petsafebrands.ui.screen.rates
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chub.petsafebrands.Config.MAX_SELECTED_RATES
-import com.chub.petsafebrands.data.FixerApiException
+import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
 import com.chub.petsafebrands.domain.GetFxRatesUseCase
+import com.chub.petsafebrands.domain.UiResult
 import com.chub.petsafebrands.domain.model.Currency
 import com.chub.petsafebrands.domain.model.CurrencyRateItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -79,16 +79,18 @@ class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesU
 
     private suspend fun fetchRates(currency: Currency) {
         isLoading.value = true
-        try {
-            val fxRates = getFxRatesUseCase(currency)
-            fxRates.baseRate?.let {
-                rates.value = fxRates.rates
-                currentRate.value = fxRates.baseRate
-                error.value = ""
+        selectedRates.value = emptyList()
+        when (val result = getFxRatesUseCase(currency)) {
+            is UiResult.Success -> {
+                result.data?.let {
+                    currentRate.value = it.baseRate
+                    rates.value = it.rates
+                    error.value = ""
+                }
+
             }
-            selectedRates.value = emptyList()
-        } catch (exception: FixerApiException) {
-            error.value = exception.message ?: "Unknown error"
+
+            is UiResult.Failure -> error.value = result.errorMessage
         }
         isLoading.value = false
     }
