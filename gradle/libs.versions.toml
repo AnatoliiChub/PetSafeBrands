@@ -12,7 +12,7 @@ kotlinKsp = "2.0.20-1.0.25"
 hiltVersion = "2.50"
 hiltNavigationCompose = "1.2.0"
 retrofit = "2.9.0"
-okhttp3 = "4.10.0"
+okhttp3 = "4.12.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

@@ -6,7 +6,7 @@ import com.chub.petsafebrands.Config.MAX_SELECTED_RATES
 import com.chub.petsafebrands.data.FixerApiException
 import com.chub.petsafebrands.domain.GetFxRatesUseCase
 import com.chub.petsafebrands.domain.model.Currency
-import com.chub.petsafebrands.domain.model.UiRate
+import com.chub.petsafebrands.domain.model.CurrencyRateItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,9 +22,9 @@ class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesU
 
     private val baseAmount = MutableStateFlow("100.0")
     private val isLoading = MutableStateFlow(false)
-    private val rates = MutableStateFlow(emptyList<UiRate>())
-    private val currentRate = MutableStateFlow(UiRate(Currency.EUR, 1.0))
-    private val selectedRates = MutableStateFlow(emptyList<UiRate>())
+    private val rates = MutableStateFlow(emptyList<CurrencyRateItem>())
+    private val currentRate = MutableStateFlow(CurrencyRateItem(Currency.EUR, 1.0))
+    private val selectedRates = MutableStateFlow(emptyList<CurrencyRateItem>())
     private val error = MutableStateFlow("")
     private val contentState = combine(
         currentRate,
@@ -46,8 +46,8 @@ class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesU
         isLoading,
         error,
         contentState
-    ) { isLoading, error, ratesState ->
-        RatesScreenState(isLoading = isLoading, error = error, contentState = ratesState)
+    ) { isLoading, error, contentState ->
+        RatesScreenState(isLoading = isLoading, error = error, contentState = contentState)
     }.flowOn(Dispatchers.Default)
         .stateIn(
             viewModelScope,
@@ -69,28 +69,10 @@ class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesU
 
     fun onAction(action: RateScreenAction) {
         when (action) {
-            is RateScreenAction.BaseRateChanged -> {
-                currentRate.value = action.rate
-                viewModelScope.launch(Dispatchers.IO) {
-                    fetchRates(action.rate.currency)
-                }
-            }
-
+            is RateScreenAction.BaseCurrencyChanged -> onBaseCurrencyChanged(action)
+            is RateScreenAction.RateSelected -> onRateSelected(action)
             is RateScreenAction.BaseAmountChanged -> {
                 baseAmount.value = action.amount
-            }
-
-            is RateScreenAction.RateSelected -> {
-                val selectedRates = state.value.contentState.selectedRates.toMutableList()
-                if (selectedRates.contains(action.rate)) {
-                    selectedRates.remove(action.rate)
-                } else if (selectedRates.size >= MAX_SELECTED_RATES) {
-                    selectedRates.removeLast()
-                    selectedRates.add(action.rate)
-                } else {
-                    selectedRates.add(action.rate)
-                }
-                this.selectedRates.value = selectedRates
             }
         }
     }
@@ -109,5 +91,25 @@ class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesU
             error.value = exception.message ?: "Unknown error"
         }
         isLoading.value = false
+    }
+
+    private fun onRateSelected(action: RateScreenAction.RateSelected) {
+        val selectedRates = state.value.contentState.selectedRates.toMutableList()
+        if (selectedRates.contains(action.rate)) {
+            selectedRates.remove(action.rate)
+        } else if (selectedRates.size >= MAX_SELECTED_RATES) {
+            selectedRates.removeLast()
+            selectedRates.add(action.rate)
+        } else {
+            selectedRates.add(action.rate)
+        }
+        this.selectedRates.value = selectedRates
+    }
+
+    private fun onBaseCurrencyChanged(action: RateScreenAction.BaseCurrencyChanged) {
+        currentRate.value = action.rate
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchRates(action.rate.currency)
+        }
     }
 }

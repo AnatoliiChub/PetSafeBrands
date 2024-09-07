@@ -27,14 +27,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.chub.petsafebrands.R
-import com.chub.petsafebrands.domain.model.UiRate
+import com.chub.petsafebrands.domain.model.CurrencyRateItem
 
 @Composable
 fun BaseRateSelectionLayout(
-    baseRate: UiRate,
+    baseRate: CurrencyRateItem,
     baseAmount: String,
-    rates: List<UiRate>,
-    onBaseRateSelected: (UiRate) -> Unit,
+    rates: List<CurrencyRateItem>,
+    onBaseRateSelected: (CurrencyRateItem) -> Unit,
     onAmountChanged: (String) -> Unit
 ) {
     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.primaryContainer)) {

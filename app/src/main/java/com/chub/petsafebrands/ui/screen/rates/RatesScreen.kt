@@ -67,7 +67,7 @@ private fun Content(
                     BaseRateSelectionLayout(baseRate = currentRate,
                         baseAmount,
                         rates = rates,
-                        { viewModel.onAction(RateScreenAction.BaseRateChanged(it)) },
+                        { viewModel.onAction(RateScreenAction.BaseCurrencyChanged(it)) },
                         { viewModel.onAction(RateScreenAction.BaseAmountChanged(it)) }
                     )
                 }

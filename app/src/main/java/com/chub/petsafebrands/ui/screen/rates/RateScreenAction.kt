@@ -1,9 +1,9 @@
 package com.chub.petsafebrands.ui.screen.rates
 
-import com.chub.petsafebrands.domain.model.UiRate
+import com.chub.petsafebrands.domain.model.CurrencyRateItem
 
 sealed class RateScreenAction {
-    data class BaseRateChanged(val rate: UiRate) : RateScreenAction()
+    data class BaseCurrencyChanged(val rate: CurrencyRateItem) : RateScreenAction()
     data class BaseAmountChanged(val amount: String) : RateScreenAction()
-    data class RateSelected(val rate: UiRate) : RateScreenAction()
+    data class RateSelected(val rate: CurrencyRateItem) : RateScreenAction()
 }

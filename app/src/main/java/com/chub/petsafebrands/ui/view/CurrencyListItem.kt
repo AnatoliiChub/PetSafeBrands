@@ -16,11 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.chub.petsafebrands.domain.model.UiRate
+import com.chub.petsafebrands.domain.model.CurrencyRateItem
 import java.util.Locale
 
 @Composable
-fun CurrencyListItem(rate: UiRate, selectedRates: List<UiRate>, onClick: (UiRate) -> Unit) {
+fun CurrencyListItem(rate: CurrencyRateItem, selectedRates: List<CurrencyRateItem>, onClick: (CurrencyRateItem) -> Unit) {
     Card(modifier = Modifier.padding(horizontal = 8.dp), colors = CardDefaults.cardColors(
         containerColor = if (selectedRates.contains(rate)) {
             MaterialTheme.colorScheme.primaryContainer
