@@ -7,9 +7,9 @@ import com.chub.petsafebrands.data.FixerFxRatesRepository
 import com.chub.petsafebrands.data.FxRatesRepository
 import com.chub.petsafebrands.data.debug.FakeFxRatesRepository
 import com.chub.petsafebrands.data.debug.FakeResponseInterceptor
-import com.chub.petsafebrands.data.retrofit.FixerCallAdapterFactory
 import com.chub.petsafebrands.data.debug.JsonReader
 import com.chub.petsafebrands.data.debug.MockApiService
+import com.chub.petsafebrands.data.retrofit.FixerCallAdapterFactory
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -57,8 +57,8 @@ class DataModule {
     }
 
     @Provides
-    fun provideFxRatesRepository(mockApiService: MockApiService, gson: Gson): FxRatesRepository {
-        return if (BuildConfig.MOCK_API) FakeFxRatesRepository(mockApiService, gson) else FixerFxRatesRepository()
+    fun provideFxRatesRepository(mockApiService: MockApiService): FxRatesRepository {
+        return if (BuildConfig.MOCK_API) FakeFxRatesRepository(mockApiService) else FixerFxRatesRepository()
     }
 
     @Provides
