@@ -1,7 +1,7 @@
 package com.chub.petsafebrands.data.debug
 
-import com.chub.petsafebrands.data.ExchangeRatesResponse
 import com.chub.petsafebrands.data.FxRatesRepository
+import com.chub.petsafebrands.data.response.ExchangeRatesResponse
 import com.chub.petsafebrands.data.retrofit.Result
 import javax.inject.Inject
 

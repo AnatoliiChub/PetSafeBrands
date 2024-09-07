@@ -1,5 +1,6 @@
 package com.chub.petsafebrands.data
 
+import com.chub.petsafebrands.data.response.ExchangeRatesResponse
 import com.chub.petsafebrands.data.retrofit.Result
 
 class FixerFxRatesRepository() : FxRatesRepository {

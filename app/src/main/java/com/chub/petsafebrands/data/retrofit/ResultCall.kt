@@ -1,6 +1,6 @@
 package com.chub.petsafebrands.data.retrofit
 
-import com.chub.petsafebrands.data.ErrorResponse
+import com.chub.petsafebrands.data.response.ErrorResponse
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
