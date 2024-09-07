@@ -1,12 +1,13 @@
 package com.chub.petsafebrands.ui.view
 
-import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -14,15 +15,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.chub.petsafebrands.R
 import com.chub.petsafebrands.domain.model.Currency
 import com.chub.petsafebrands.domain.model.CurrencyRateItem
-import java.util.Locale
+import com.chub.petsafebrands.toMoneyString
 
 @Composable
-fun CurrencyListItem(rate: CurrencyRateItem, selectedRates: List<CurrencyRateItem>, onClick: (CurrencyRateItem) -> Unit) {
+fun CurrencyListItem(
+    rate: CurrencyRateItem,
+    selectedRates: List<CurrencyRateItem>,
+    onClick: (CurrencyRateItem) -> Unit
+) {
     Card(modifier = Modifier.padding(horizontal = 8.dp), colors = CardDefaults.cardColors(
         containerColor = if (selectedRates.contains(rate)) {
             MaterialTheme.colorScheme.primaryContainer
@@ -36,16 +44,16 @@ fun CurrencyListItem(rate: CurrencyRateItem, selectedRates: List<CurrencyRateIte
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column {
-                Text(text = "Currency :")
+                Text(text = stringResource(R.string.currency))
                 Text(text = rate.currency.toString(), fontWeight = FontWeight.Bold)
             }
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.widthIn(min = 32.dp))
             Box(contentAlignment = Alignment.CenterEnd) {
-                Log.d("CurrencyListItem", "Rate: ${rate.value}")
-                Text(text = String.format(Locale.US, "%.2f", rate.value))
+                Text(text = rate.value.toMoneyString(), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
     }
@@ -55,7 +63,11 @@ fun CurrencyListItem(rate: CurrencyRateItem, selectedRates: List<CurrencyRateIte
 @Composable
 fun CurrencyListItemPreview() {
     CurrencyListItem(
-        rate = CurrencyRateItem(currency = Currency.USD, coefficient = 1.0, value = 122.0),
+        rate = CurrencyRateItem(
+            currency = Currency.USD,
+            coefficient = 1.0,
+            value = 12546456587567874636456456434646456457456452.0
+        ),
         selectedRates = emptyList()
     ) {}
 }

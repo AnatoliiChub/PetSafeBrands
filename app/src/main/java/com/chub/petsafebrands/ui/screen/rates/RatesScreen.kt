@@ -16,8 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
 import com.chub.petsafebrands.R
+import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
+import com.chub.petsafebrands.navigation.TimeSeriesScreenNav
 import com.chub.petsafebrands.ui.view.BaseRateSelectionLayout
 import com.chub.petsafebrands.ui.view.CurrencyListItem
 import com.chub.petsafebrands.ui.view.ErrorLayout
@@ -26,12 +27,15 @@ import com.chub.petsafebrands.ui.view.TextFloatingButton
 import com.chub.petsafebrands.ui.view.TopBar
 
 @Composable
-fun RatesScreen(viewModel: RateScreenViewModel = hiltViewModel()) {
+fun RatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: RateScreenViewModel = hiltViewModel()) {
     val state = viewModel.state.collectAsStateWithLifecycle()
-
-    Scaffold(topBar = { TopBar(title = R.string.rates) }, floatingActionButton = {
-        if (state.value.contentState.selectedRates.size == MAX_SELECTED_RATES) {
-            TextFloatingButton(text = R.string.show_details, icon = Icons.Default.Info) {}
+    val selectedItemsCount = state.value.contentState.selectedRates.size
+    val baseAmount = state.value.contentState.baseAmount
+    Scaffold(topBar = { TopBar(title = R.string.fx_rates) }, floatingActionButton = {
+        if (selectedItemsCount == MAX_SELECTED_RATES && baseAmount.toDoubleOrNull() != null) {
+            TextFloatingButton(text = R.string.show_details, icon = Icons.Default.Info) {
+                onCurrenciesSelected(provideTimeSeriesScreenNav(state.value))
+            }
         }
     }, floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
@@ -80,6 +84,16 @@ private fun Content(
         }
     }
 }
+
+private fun provideTimeSeriesScreenNav(state: RatesScreenState) =
+    TimeSeriesScreenNav(
+        baseCurrency = state.contentState.currentRate!!.currency.ordinal,
+        baseAmount = state.contentState.baseAmount.toFloatOrNull() ?: 0.0f,
+        currencies = listOf(
+            state.contentState.selectedRates[0].currency.ordinal,
+            state.contentState.selectedRates[1].currency.ordinal
+        )
+    )
 
 
 

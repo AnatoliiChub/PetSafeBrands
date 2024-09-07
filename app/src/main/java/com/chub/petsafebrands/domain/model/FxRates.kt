@@ -1,6 +1,4 @@
-package com.chub.petsafebrands.domain
-
-import com.chub.petsafebrands.domain.model.CurrencyRateItem
+package com.chub.petsafebrands.domain.model
 
 data class FxRates(
     val baseRate: CurrencyRateItem,

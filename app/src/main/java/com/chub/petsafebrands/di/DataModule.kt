@@ -3,6 +3,7 @@ package com.chub.petsafebrands.di
 import android.content.Context
 import android.content.res.AssetManager
 import com.chub.petsafebrands.BuildConfig
+import com.chub.petsafebrands.data.DateRangeProvider
 import com.chub.petsafebrands.data.FixerFxRatesRepository
 import com.chub.petsafebrands.data.FxRatesRepository
 import com.chub.petsafebrands.data.debug.FakeFxRatesRepository
@@ -57,8 +58,13 @@ class DataModule {
     }
 
     @Provides
-    fun provideFxRatesRepository(mockApiService: MockApiService): FxRatesRepository {
-        return if (BuildConfig.MOCK_API) FakeFxRatesRepository(mockApiService) else FixerFxRatesRepository()
+    fun provideFxRatesRepository(
+        mockApiService: MockApiService,
+        dateRangeProvider: DateRangeProvider
+    ): FxRatesRepository {
+        return if (BuildConfig.MOCK_API) FakeFxRatesRepository(
+            mockApiService, dateRangeProvider
+        ) else FixerFxRatesRepository(dateRangeProvider)
     }
 
     @Provides

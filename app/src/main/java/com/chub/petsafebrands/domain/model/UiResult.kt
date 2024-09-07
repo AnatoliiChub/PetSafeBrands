@@ -1,4 +1,4 @@
-package com.chub.petsafebrands.domain
+package com.chub.petsafebrands.domain.model
 
 sealed class UiResult<out T> {
     data class Success<T>(val data: T?) : UiResult<T>()

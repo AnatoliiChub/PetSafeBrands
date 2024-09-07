@@ -18,7 +18,13 @@ class FakeResponseInterceptor @Inject constructor(private val jsonReader: JsonRe
         val headers = chain.request().headers
         val api = chain.request().url.toString().substringAfterLast("/")
         val currency = headers[MOCK_RESPONSE_HEADER]
-        val file = if (IS_ERROR_RESPONSE) "error.json" else "$api/${currency}_response.json"
+        val file = if (IS_ERROR_RESPONSE) "error.json" else {
+            when (api) {
+                "latest" -> "$api/${currency}_response.json"
+                "timeseries" -> "$api/response.json"
+                else -> "error.json"
+            }
+        }
         val responseString = jsonReader.getJsonAsString(file)
 
         return chain.proceed(chain.request())

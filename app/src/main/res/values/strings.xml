@@ -1,7 +1,12 @@
 <resources>
     <string name="app_name">PetSafeBrands</string>
-    <string name="rates">Rates</string>
+    <string name="fx_rates">FX Rates</string>
+    <string name="fx_rates_history">FX Rates History</string>
     <string name="show_details">Show Details</string>
     <string name="amount">Amount</string>
     <string name="try_again">Try again</string>
+    <string name="date">Date :</string>
+    <string name="daily_fx_rates">Daily FX Rates</string>
+    <string name="base_amount">Base amount : %1$s %2$s</string>
+    <string name="currency">Currency :</string>
 </resources>

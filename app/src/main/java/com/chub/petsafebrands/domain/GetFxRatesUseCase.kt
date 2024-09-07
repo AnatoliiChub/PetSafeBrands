@@ -5,6 +5,8 @@ import com.chub.petsafebrands.domain.model.Currency
 import com.chub.petsafebrands.domain.model.CurrencyRateItem
 import javax.inject.Inject
 import com.chub.petsafebrands.data.retrofit.Result
+import com.chub.petsafebrands.domain.model.FxRates
+import com.chub.petsafebrands.domain.model.UiResult
 
 class GetFxRatesUseCase @Inject constructor(private val repository: FxRatesRepository) {
     suspend operator fun invoke(base: Currency): UiResult<FxRates> {

@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
 import com.chub.petsafebrands.domain.GetFxRatesUseCase
-import com.chub.petsafebrands.domain.UiResult
 import com.chub.petsafebrands.domain.model.Currency
 import com.chub.petsafebrands.domain.model.CurrencyRateItem
+import com.chub.petsafebrands.domain.model.UiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,10 +20,14 @@ import javax.inject.Inject
 @HiltViewModel
 class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesUseCase) : ViewModel() {
 
-    private val baseAmount = MutableStateFlow("100.0")
+    companion object {
+        private const val INITIAL_BASE_AMOUNT = "100.0"
+    }
+
+    private val baseAmount = MutableStateFlow(INITIAL_BASE_AMOUNT)
     private val isLoading = MutableStateFlow(false)
     private val rates = MutableStateFlow(emptyList<CurrencyRateItem>())
-    private val currentRate = MutableStateFlow(CurrencyRateItem(Currency.EUR, 1.0))
+    private val currentRate = MutableStateFlow(CurrencyRateItem(Currency.EUR))
     private val selectedRates = MutableStateFlow(emptyList<CurrencyRateItem>())
     private val error = MutableStateFlow("")
     private val contentState = combine(
@@ -96,6 +100,9 @@ class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesU
     }
 
     private fun onRateSelected(action: RateScreenAction.RateSelected) {
+        if (baseAmount.value.toDoubleOrNull() == null) {
+            return
+        }
         val selectedRates = state.value.contentState.selectedRates.toMutableList()
         if (selectedRates.contains(action.rate)) {
             selectedRates.remove(action.rate)
