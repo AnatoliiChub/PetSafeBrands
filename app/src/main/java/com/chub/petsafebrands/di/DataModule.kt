@@ -33,6 +33,7 @@ class DataModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(fakeResponseInterceptor: FakeResponseInterceptor): OkHttpClient {
+        // TODO: IMPLEMENT TLS PINING
         return OkHttpClient.Builder().apply {
             if (BuildConfig.MOCK_API) {
                 this.addInterceptor(fakeResponseInterceptor)
