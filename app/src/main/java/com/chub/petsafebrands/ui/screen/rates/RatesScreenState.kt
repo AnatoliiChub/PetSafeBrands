@@ -1,6 +1,6 @@
 package com.chub.petsafebrands.ui.screen.rates
 
-import com.chub.petsafebrands.domain.model.CurrencyRateItem
+import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 
 data class RatesScreenState(
     val isLoading: Boolean,

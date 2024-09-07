@@ -5,11 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.chub.petsafebrands.data.RequestTimeSeries
+import com.chub.petsafebrands.domain.DescendingSortUseCase
 import com.chub.petsafebrands.domain.GetDailyRatesUseCase
-import com.chub.petsafebrands.domain.model.Currency
-import com.chub.petsafebrands.domain.model.CurrencyRateItem
-import com.chub.petsafebrands.domain.model.DayFxRate
-import com.chub.petsafebrands.domain.model.UiResult
+import com.chub.petsafebrands.domain.pojo.Currency
+import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
+import com.chub.petsafebrands.domain.pojo.DayFxRate
+import com.chub.petsafebrands.domain.pojo.UiResult
 import com.chub.petsafebrands.navigation.TimeSeriesScreenNav
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DailyFxRatesViewModel @Inject constructor(
     private val getDailyRatesUseCase: GetDailyRatesUseCase,
+    private val descendingSortUseCase: DescendingSortUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -33,16 +35,29 @@ class DailyFxRatesViewModel @Inject constructor(
     private val error = MutableStateFlow("")
     private val isLoading = MutableStateFlow(false)
     private val currencies: List<Currency>
+    private val sortBy: MutableStateFlow<SortBy> = MutableStateFlow(SortBy.ByDate)
+    private val contentState = combine(baseAmount, baseCurrency, dayRates, sortBy) { amount, currency, rates, sortBy ->
+        val sortedRates = descendingSortUseCase(rates, sortBy)
+        DailyRatesContentState(amount, currency, sortedRates, sortBy)
+    }
 
     val state =
-        combine(baseAmount, baseCurrency, dayRates, error, isLoading) { amount, currency, rates, error, isLoading ->
-            DailySeriesScreenState(amount, currency, rates, error, isLoading)
+        combine(contentState, error, isLoading) { contentState, error, isLoading ->
+            DailyRatesScreenState(contentState, error, isLoading)
         }.flowOn(Dispatchers.Default)
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(),
-                initialValue = DailySeriesScreenState(0f, Currency.EUR, emptyList())
+                initialValue = DailyRatesScreenState(
+                    DailyRatesContentState(
+                        baseAmount = 0f,
+                        baseCurrency = Currency.EUR,
+                        dayRates = emptyList(),
+                        sortBy = SortBy.ByDate
+                    ), "", false
+                )
             )
+
 
     init {
         val item = savedStateHandle.toRoute<TimeSeriesScreenNav>()
@@ -71,5 +86,9 @@ class DailyFxRatesViewModel @Inject constructor(
             }
             isLoading.value = false
         }
+    }
+
+    fun onSortByChanged(sortBy: SortBy) {
+        this.sortBy.value = sortBy
     }
 }

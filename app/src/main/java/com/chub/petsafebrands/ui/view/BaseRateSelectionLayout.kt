@@ -28,8 +28,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.chub.petsafebrands.R
-import com.chub.petsafebrands.domain.model.Currency
-import com.chub.petsafebrands.domain.model.CurrencyRateItem
+import com.chub.petsafebrands.domain.pojo.Currency
+import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 
 @Composable
 fun BaseRateSelectionLayout(

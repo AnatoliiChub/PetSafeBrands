@@ -12,21 +12,32 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.chub.petsafebrands.R
-import com.chub.petsafebrands.domain.model.Currency
-import com.chub.petsafebrands.domain.model.CurrencyRateItem
-import com.chub.petsafebrands.domain.model.DayFxRate
+import com.chub.petsafebrands.domain.pojo.Currency
+import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
+import com.chub.petsafebrands.domain.pojo.DayFxRate
 import com.chub.petsafebrands.domain.toFormattedString
 import com.chub.petsafebrands.toMoneyString
+import com.chub.petsafebrands.ui.screen.tiimeseries.SortBy
 import java.util.Date
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CurrencyRateComparisonTable(rates: List<DayFxRate>) {
+fun CurrencyRateComparisonTable(rates: List<DayFxRate>, sortBy: SortBy, onSortByChanged: (SortBy) -> Unit) {
     LazyColumn(Modifier.fillMaxSize()) {
         stickyHeader {
-            Row(Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
-                TableField(text = stringResource(R.string.date))
-                rates.firstOrNull()?.rates?.forEach { TableField(text = it.currency.name) }
+            Row(Modifier.padding(horizontal = 8.dp)) {
+                TableField(
+                    text = stringResource(R.string.date),
+                    onClick = { onSortByChanged(SortBy.ByDate) },
+                    isSelected = sortBy == SortBy.ByDate
+                )
+                rates.firstOrNull()?.rates?.forEach {
+                    TableField(
+                        text = it.currency.name,
+                        onClick = { onSortByChanged(SortBy.ByCurrency(it.currency)) },
+                        isSelected = sortBy == SortBy.ByCurrency(it.currency)
+                    )
+                }
             }
         }
         items(rates) { rate ->
@@ -42,7 +53,7 @@ fun CurrencyRateComparisonTable(rates: List<DayFxRate>) {
 @Composable
 fun CurrencyRateComparisonTablePreview() {
     CurrencyRateComparisonTable(
-        listOf(
+        rates = listOf(
             DayFxRate(
                 Date(), listOf(
                     CurrencyRateItem(Currency.USD, 1.0),
@@ -73,6 +84,8 @@ fun CurrencyRateComparisonTablePreview() {
                     CurrencyRateItem(Currency.JPY, 1.2),
                 )
             ),
-        )
+        ),
+        sortBy = SortBy.ByDate,
+        onSortByChanged = {}
     )
 }

@@ -3,10 +3,10 @@ package com.chub.petsafebrands.domain
 import com.chub.petsafebrands.data.FxRatesRepository
 import com.chub.petsafebrands.data.RequestTimeSeries
 import com.chub.petsafebrands.data.retrofit.Result
-import com.chub.petsafebrands.domain.model.Currency
-import com.chub.petsafebrands.domain.model.CurrencyRateItem
-import com.chub.petsafebrands.domain.model.DayFxRate
-import com.chub.petsafebrands.domain.model.UiResult
+import com.chub.petsafebrands.domain.pojo.Currency
+import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
+import com.chub.petsafebrands.domain.pojo.DayFxRate
+import com.chub.petsafebrands.domain.pojo.UiResult
 import javax.inject.Inject
 
 class GetDailyRatesUseCase @Inject constructor(

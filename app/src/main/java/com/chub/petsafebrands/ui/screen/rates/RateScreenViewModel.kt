@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
 import com.chub.petsafebrands.domain.GetFxRatesUseCase
-import com.chub.petsafebrands.domain.model.Currency
-import com.chub.petsafebrands.domain.model.CurrencyRateItem
-import com.chub.petsafebrands.domain.model.UiResult
+import com.chub.petsafebrands.domain.pojo.Currency
+import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
+import com.chub.petsafebrands.domain.pojo.UiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

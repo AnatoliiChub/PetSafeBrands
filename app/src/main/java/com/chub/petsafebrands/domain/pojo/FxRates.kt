@@ -1,4 +1,4 @@
-package com.chub.petsafebrands.domain.model
+package com.chub.petsafebrands.domain.pojo
 
 data class FxRates(
     val baseRate: CurrencyRateItem,

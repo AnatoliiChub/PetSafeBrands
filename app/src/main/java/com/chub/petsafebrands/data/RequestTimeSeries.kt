@@ -1,7 +1,7 @@
 package com.chub.petsafebrands.data
 
-import com.chub.petsafebrands.domain.model.Currency
-import com.chub.petsafebrands.domain.model.CurrencyRateItem
+import com.chub.petsafebrands.domain.pojo.Currency
+import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 
 data class RequestTimeSeries(
     val base : CurrencyRateItem,

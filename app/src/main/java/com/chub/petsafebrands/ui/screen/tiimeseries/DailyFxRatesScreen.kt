@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chub.petsafebrands.R
-import com.chub.petsafebrands.domain.model.Currency
+import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.toMoneyString
 import com.chub.petsafebrands.ui.view.CurrencyRateComparisonTable
 import com.chub.petsafebrands.ui.view.ErrorLayout
@@ -40,9 +40,11 @@ fun DailyFxRatesScreen(onBack: () -> Unit, viewModel: DailyFxRatesViewModel = hi
                     ErrorLayout(errorMessage) { viewModel.fetchDailyRates() }
                 } else {
                     Column(Modifier.fillMaxSize()) {
-                        BaseAmountLayout(baseCurrency,baseAmount)
-                        if (dayRates.isNotEmpty()) {
-                            CurrencyRateComparisonTable(rates = dayRates)
+                        BaseAmountLayout(contentState.baseCurrency, contentState.baseAmount)
+                        if (contentState.dayRates.isNotEmpty()) {
+                            CurrencyRateComparisonTable(rates = contentState.dayRates, sortBy = contentState.sortBy) {
+                                viewModel.onSortByChanged(it)
+                            }
                         }
                     }
                 }
