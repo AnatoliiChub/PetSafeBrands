@@ -25,8 +25,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.chub.petsafebrands.R
+import com.chub.petsafebrands.domain.model.Currency
 import com.chub.petsafebrands.domain.model.CurrencyRateItem
 
 @Composable
@@ -79,4 +81,23 @@ fun BaseRateSelectionLayout(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun BaseRateSelectionLayoutPreview() {
+    BaseRateSelectionLayout(
+        baseRate = CurrencyRateItem(Currency.EUR, 1.0),
+        baseAmount = "100.0",
+        rates = listOf(
+            CurrencyRateItem(Currency.USD, 1.2),
+            CurrencyRateItem(Currency.GBP, 0.8),
+            CurrencyRateItem(Currency.JPY, 130.0),
+            CurrencyRateItem(Currency.AUD, 1.6),
+            CurrencyRateItem(Currency.CAD, 1.5),
+            CurrencyRateItem(Currency.CHF, 1.1),
+        ),
+        onBaseRateSelected = {},
+        onAmountChanged = {}
+    )
 }

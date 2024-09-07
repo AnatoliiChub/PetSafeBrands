@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,4 +26,10 @@ fun TopBar(@StringRes title: Int) {
                 contentAlignment = Alignment.Center,
             ) { Text(text = stringResource(title)) }
         })
+}
+
+@Preview
+@Composable
+fun TopBarPreview() {
+    TopBar(title = com.chub.petsafebrands.R.string.app_name)
 }

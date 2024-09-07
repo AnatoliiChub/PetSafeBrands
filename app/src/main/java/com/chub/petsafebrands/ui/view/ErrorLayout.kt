@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.chub.petsafebrands.R
 
@@ -31,4 +32,10 @@ fun ErrorLayout(errorMessage: String, onClick: () -> Unit) {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun ErrorLayoutPreview() {
+    ErrorLayout("It's a very long and interesting error message that you ever read") {}
 }

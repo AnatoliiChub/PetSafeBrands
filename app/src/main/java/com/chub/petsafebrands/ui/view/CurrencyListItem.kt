@@ -15,7 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.chub.petsafebrands.domain.model.Currency
 import com.chub.petsafebrands.domain.model.CurrencyRateItem
 import java.util.Locale
 
@@ -47,4 +49,13 @@ fun CurrencyListItem(rate: CurrencyRateItem, selectedRates: List<CurrencyRateIte
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun CurrencyListItemPreview() {
+    CurrencyListItem(
+        rate = CurrencyRateItem(currency = Currency.USD, coefficient = 1.0, value = 122.0),
+        selectedRates = emptyList()
+    ) {}
 }
