@@ -11,6 +11,8 @@ composeBom = "2024.08.00"
 kotlinKsp = "2.0.20-1.0.25"
 hiltVersion = "2.50"
 hiltNavigationCompose = "1.2.0"
+retrofit = "2.9.0"
+okhttp3 = "4.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,6 +36,10 @@ symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-ap
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 com-google-devtools-ksp-gradle-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "kotlinKsp" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+okhttp3  = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3" }
+okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

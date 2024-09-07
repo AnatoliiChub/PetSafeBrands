@@ -1,7 +1,8 @@
-package com.chub.petsafebrands
+package com.chub.petsafebrands.domain.model
 
 data class UiRate(
-    val name: String,
+    val currency: Currency,
     val coefficient: Double,
     val value: Double = 0.0
 )
+

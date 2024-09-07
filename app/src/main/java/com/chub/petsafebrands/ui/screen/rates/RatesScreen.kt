@@ -20,48 +20,61 @@ import com.chub.petsafebrands.Config.MAX_SELECTED_RATES
 import com.chub.petsafebrands.R
 import com.chub.petsafebrands.ui.view.BaseRateSelectionLayout
 import com.chub.petsafebrands.ui.view.CurrencyListItem
+import com.chub.petsafebrands.ui.view.ErrorLayout
 import com.chub.petsafebrands.ui.view.LoadingLayout
 import com.chub.petsafebrands.ui.view.TextFloatingButton
 import com.chub.petsafebrands.ui.view.TopBar
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RatesScreen(viewModel: RateScreenViewModel = hiltViewModel()) {
     val state = viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(topBar = { TopBar(title = R.string.rates) }, floatingActionButton = {
-        if (state.value.selectedRates.size == MAX_SELECTED_RATES) {
+        if (state.value.contentState.selectedRates.size == MAX_SELECTED_RATES) {
             TextFloatingButton(text = R.string.show_details, icon = Icons.Default.Info) {}
         }
     }, floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
-        with(state.value) {
-            Box(
-                Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
-            ) {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    stickyHeader {
-                        currentRate?.let {
-                            BaseRateSelectionLayout(baseRate = currentRate,
-                                baseAmount,
-                                rates = state.value.rates,
-                                { viewModel.onAction(RateScreenAction.BaseRateChanged(it)) },
-                                { viewModel.onAction(RateScreenAction.BaseAmountChanged(it)) }
-                            )
-                        }
-                    }
-                    items(rates, key = { it.name }) { rate ->
-                        CurrencyListItem(rate = rate, selectedRates = selectedRates) {
-                            viewModel.onAction(RateScreenAction.RateSelected(rate))
-                        }
-                    }
+        Box(
+            Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            if (state.value.error.isNotEmpty()) {
+                ErrorLayout(state.value.error) { viewModel.fetchRates() }
+            } else {
+                Content(viewModel, state.value.contentState)
+            }
+            if (state.value.isLoading) {
+                LoadingLayout()
+            }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun Content(
+    viewModel: RateScreenViewModel,
+    state: RatesContentState
+) {
+    with(state) {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            stickyHeader {
+                currentRate?.let {
+                    BaseRateSelectionLayout(baseRate = currentRate,
+                        baseAmount,
+                        rates = rates,
+                        { viewModel.onAction(RateScreenAction.BaseRateChanged(it)) },
+                        { viewModel.onAction(RateScreenAction.BaseAmountChanged(it)) }
+                    )
                 }
-                if (state.value.isLoading) {
-                    LoadingLayout()
+            }
+            items(rates, key = { it.currency }) { rate ->
+                CurrencyListItem(rate = rate, selectedRates = selectedRates) {
+                    viewModel.onAction(RateScreenAction.RateSelected(rate))
                 }
             }
         }

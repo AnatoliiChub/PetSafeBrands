@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.chub.petsafebrands.UiRate
+import com.chub.petsafebrands.domain.model.UiRate
 import java.util.Locale
 
 @Composable
@@ -38,7 +38,7 @@ fun CurrencyListItem(rate: UiRate, selectedRates: List<UiRate>, onClick: (UiRate
         ) {
             Column {
                 Text(text = "Currency :")
-                Text(text = rate.name, fontWeight = FontWeight.Bold)
+                Text(text = rate.currency.toString(), fontWeight = FontWeight.Bold)
             }
             Spacer(modifier = Modifier.weight(1f))
             Box(contentAlignment = Alignment.CenterEnd) {

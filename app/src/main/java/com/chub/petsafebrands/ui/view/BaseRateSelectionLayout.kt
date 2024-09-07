@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.chub.petsafebrands.R
-import com.chub.petsafebrands.UiRate
+import com.chub.petsafebrands.domain.model.UiRate
 
 @Composable
 fun BaseRateSelectionLayout(
@@ -48,7 +48,7 @@ fun BaseRateSelectionLayout(
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(text = baseRate.name)
+                Text(text = baseRate.currency.name)
                 Icon(Icons.Filled.ArrowDropDown, contentDescription = "Localized description")
             }
             DropdownMenu(
@@ -63,7 +63,7 @@ fun BaseRateSelectionLayout(
                             onBaseRateSelected(selectionOption)
                             expanded = false
                         }, text = {
-                            Text(text = selectionOption.name)
+                            Text(text = selectionOption.currency.name)
                         })
                 }
             }
@@ -74,7 +74,7 @@ fun BaseRateSelectionLayout(
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 value = baseAmount,
-                isError = baseAmount.toDoubleOrNull() == null,
+                isError = baseAmount.toDoubleOrNull() == null ,
                 onValueChange = onAmountChanged
             )
         }

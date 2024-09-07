@@ -24,8 +24,16 @@ android {
     }
 
     buildTypes {
+        debug {
+            // TODO: Change this to fixer api
+            buildConfigField("String", "API_BASE_URL", "\"https://stackoverflow.com/\"")
+            buildConfigField("Boolean", "MOCK_API", "true")
+        }
         release {
             isMinifyEnabled = false
+            // TODO: Change this to fixer api
+            buildConfigField("String", "API_BASE_URL", "\"https://stackoverflow.com/\"")
+            buildConfigField("Boolean", "MOCK_API", "false")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -38,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -63,6 +72,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp3)
+    implementation(libs.okhttp3.logging)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
