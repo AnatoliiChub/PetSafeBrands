@@ -21,7 +21,7 @@ import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.toMoneyString
 import com.chub.petsafebrands.ui.screen.ErrorState
 import com.chub.petsafebrands.ui.screen.daily.state.DailyRatesContentState
-import com.chub.petsafebrands.ui.screen.daily.state.SortBy
+import com.chub.petsafebrands.domain.pojo.SortBy
 import com.chub.petsafebrands.ui.view.CurrencyRateComparisonTable
 import com.chub.petsafebrands.ui.view.ErrorLayout
 import com.chub.petsafebrands.ui.view.LoadingLayout

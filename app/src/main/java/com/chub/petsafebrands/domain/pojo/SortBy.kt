@@ -1,6 +1,4 @@
-package com.chub.petsafebrands.ui.screen.daily.state
-
-import com.chub.petsafebrands.domain.pojo.Currency
+package com.chub.petsafebrands.domain.pojo
 
 sealed class SortBy {
     data object ByDate : SortBy()

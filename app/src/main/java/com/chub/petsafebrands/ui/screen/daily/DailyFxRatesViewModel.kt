@@ -16,7 +16,7 @@ import com.chub.petsafebrands.navigation.TimeSeriesScreenNav
 import com.chub.petsafebrands.ui.screen.ErrorState
 import com.chub.petsafebrands.ui.screen.daily.state.DailyRatesContentState
 import com.chub.petsafebrands.ui.screen.daily.state.DailyRatesScreenState
-import com.chub.petsafebrands.ui.screen.daily.state.SortBy
+import com.chub.petsafebrands.domain.pojo.SortBy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
