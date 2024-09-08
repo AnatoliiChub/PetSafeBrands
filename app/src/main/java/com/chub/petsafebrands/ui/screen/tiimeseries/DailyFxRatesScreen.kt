@@ -37,13 +37,15 @@ fun DailyFxRatesScreen(onBack: () -> Unit, viewModel: DailyFxRatesViewModel = hi
         ) {
             with(state.value) {
                 if (errorMessage.isNotEmpty()) {
-                    ErrorLayout(errorMessage) { viewModel.fetchDailyRates() }
+                    ErrorLayout(errorMessage) {
+                        viewModel.onAction(DailyFxRatesAction.FetchDailyRates)
+                    }
                 } else {
                     Column(Modifier.fillMaxSize()) {
                         BaseAmountLayout(contentState.baseCurrency, contentState.baseAmount)
                         if (contentState.dayRates.isNotEmpty()) {
                             CurrencyRateComparisonTable(rates = contentState.dayRates, sortBy = contentState.sortBy) {
-                                viewModel.onSortByChanged(it)
+                                viewModel.onAction(DailyFxRatesAction.SortByChanged(it))
                             }
                         }
                     }

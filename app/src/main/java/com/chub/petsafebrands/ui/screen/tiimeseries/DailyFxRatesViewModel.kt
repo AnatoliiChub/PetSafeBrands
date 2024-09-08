@@ -41,8 +41,7 @@ class DailyFxRatesViewModel @Inject constructor(
         DailyRatesContentState(amount, currency, sortedRates, sortBy)
     }
 
-    val state =
-        combine(contentState, error, isLoading) { contentState, error, isLoading ->
+    val state = combine(contentState, error, isLoading) { contentState, error, isLoading ->
             DailyRatesScreenState(contentState, error, isLoading)
         }.flowOn(Dispatchers.Default)
             .stateIn(
@@ -67,7 +66,14 @@ class DailyFxRatesViewModel @Inject constructor(
         fetchDailyRates()
     }
 
-    fun fetchDailyRates() {
+    fun onAction(action: DailyFxRatesAction) {
+        when (action) {
+            is DailyFxRatesAction.SortByChanged -> onSortByChanged(action.sortBy)
+            DailyFxRatesAction.FetchDailyRates -> fetchDailyRates()
+        }
+    }
+
+    private fun fetchDailyRates() {
         viewModelScope.launch(Dispatchers.Default) {
             isLoading.value = true
             val uiResult = getDailyRatesUseCase(
@@ -88,7 +94,8 @@ class DailyFxRatesViewModel @Inject constructor(
         }
     }
 
-    fun onSortByChanged(sortBy: SortBy) {
+    private fun onSortByChanged(sortBy: SortBy) {
         this.sortBy.value = sortBy
     }
 }
+

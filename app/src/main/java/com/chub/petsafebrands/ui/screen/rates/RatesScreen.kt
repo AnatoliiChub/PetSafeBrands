@@ -45,7 +45,7 @@ fun RatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: 
                 .fillMaxSize()
         ) {
             if (state.value.error.isNotEmpty()) {
-                ErrorLayout(state.value.error) { viewModel.fetchRates() }
+                ErrorLayout(state.value.error) { viewModel.onAction(RateScreenAction.FetchRates) }
             } else {
                 Content(viewModel, state.value.contentState)
             }

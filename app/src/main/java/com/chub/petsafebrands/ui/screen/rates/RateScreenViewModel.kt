@@ -65,19 +65,20 @@ class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesU
         }
     }
 
-    fun fetchRates() {
-        viewModelScope.launch(Dispatchers.IO) {
-            fetchRates(currentRate.value.currency)
-        }
-    }
-
     fun onAction(action: RateScreenAction) {
         when (action) {
             is RateScreenAction.BaseCurrencyChanged -> onBaseCurrencyChanged(action)
             is RateScreenAction.RateSelected -> onRateSelected(action)
+            is RateScreenAction.FetchRates -> fetchRates()
             is RateScreenAction.BaseAmountChanged -> {
                 baseAmount.value = action.amount
             }
+        }
+    }
+
+    private fun fetchRates() {
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchRates(currentRate.value.currency)
         }
     }
 
