@@ -1,4 +1,4 @@
-package com.chub.petsafebrands.di
+package com.chub.petsafebrands.di.qualifiers
 
 import javax.inject.Qualifier
 

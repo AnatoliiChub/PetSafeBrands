@@ -5,8 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.chub.petsafebrands.config.Config.STOP_TIMEOUT_MILLIS
-import com.chub.petsafebrands.data.RequestDailyRates
-import com.chub.petsafebrands.di.WorkDispatcher
+import com.chub.petsafebrands.di.qualifiers.WorkDispatcher
 import com.chub.petsafebrands.domain.DescendingSortUseCase
 import com.chub.petsafebrands.domain.GetDailyRatesUseCase
 import com.chub.petsafebrands.domain.pojo.Currency
@@ -38,6 +37,10 @@ class DailyFxRatesViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    companion object {
+        private const val DAYS_NUMBER = 5
+    }
+
     private val baseAmount = MutableStateFlow(BigDecimal.ZERO)
     private val baseCurrency = MutableStateFlow(Currency.EUR)
     private val dayRates = MutableStateFlow(emptyList<DayFxRate>())
@@ -45,6 +48,7 @@ class DailyFxRatesViewModel @Inject constructor(
     private val isLoading = MutableStateFlow(false)
     private val currencies: List<Currency>
     private val sortBy: MutableStateFlow<SortBy> = MutableStateFlow(SortBy.ByDate)
+
     private val contentState = combine(baseAmount, baseCurrency, dayRates, sortBy) { amount, currency, rates, sortBy ->
         val sortedRates = descendingSortUseCase(rates, sortBy)
         DailyRatesContentState(amount, currency, sortedRates, sortBy)
@@ -85,13 +89,8 @@ class DailyFxRatesViewModel @Inject constructor(
     private fun fetchDailyRates() {
         viewModelScope.launch(workDispatcher) {
             isLoading.value = true
-            val uiResult = getDailyRatesUseCase(
-                RequestDailyRates(
-                    CurrencyRateItem(baseCurrency.value, value = baseAmount.value),
-                    currencies
-                )
-            )
-            when (uiResult) {
+            val base = CurrencyRateItem(currency = baseCurrency.value, value = baseAmount.value)
+            when (val uiResult = getDailyRatesUseCase(base, currencies, DAYS_NUMBER)) {
                 is UiResult.Success -> {
                     uiResult.data?.let { dayRates.value = it }
                     error.value = ErrorState.None

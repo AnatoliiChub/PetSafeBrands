@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -26,12 +28,18 @@ android {
     }
 
     buildTypes {
+        val p = Properties()
+        p.load(project.rootProject.file("local.properties").reader())
+        val apiKey: String = p.getProperty("API_KEY")
+
         debug {
+            buildConfigField("String", "API_KEY", "\"$apiKey\"")
             buildConfigField("String", "API_BASE_URL", "\"https://data.fixer.io/api/\"")
             buildConfigField("Boolean", "MOCK_API", "true")
         }
         release {
             isMinifyEnabled = false
+            buildConfigField("String", "API_KEY", "\"$apiKey\"")
             buildConfigField("String", "API_BASE_URL", "\"https://data.fixer.io/api/\"")
             buildConfigField("Boolean", "MOCK_API", "false")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

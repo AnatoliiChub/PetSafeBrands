@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.res.AssetManager
 import com.chub.petsafebrands.BuildConfig
 import com.chub.petsafebrands.config.DebugConfig
-import com.chub.petsafebrands.data.DateRangeProvider
+import com.chub.petsafebrands.data.FixerApi
 import com.chub.petsafebrands.data.debug.FakeFxRatesRepository
 import com.chub.petsafebrands.data.debug.FakeResponseInterceptor
 import com.chub.petsafebrands.data.debug.JsonReader
@@ -12,6 +12,7 @@ import com.chub.petsafebrands.data.debug.MockApiService
 import com.chub.petsafebrands.data.repo.FixerFxRatesRepository
 import com.chub.petsafebrands.data.repo.FxRatesRepository
 import com.chub.petsafebrands.data.retrofit.FixerCallAdapterFactory
+import com.chub.petsafebrands.di.qualifiers.WorkDispatcher
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -55,9 +56,8 @@ class AppModule {
     @Provides
     @Singleton
     fun provideMockApiService(client: OkHttpClient, callAdapterFactory: FixerCallAdapterFactory): MockApiService {
-        val url = if (BuildConfig.MOCK_API) DebugConfig.BASE_URL else BuildConfig.API_BASE_URL
         return Retrofit.Builder()
-            .baseUrl(url)
+            .baseUrl(DebugConfig.BASE_URL)
             .addCallAdapterFactory(callAdapterFactory)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
@@ -66,14 +66,29 @@ class AppModule {
     }
 
     @Provides
-    fun provideFxRatesRepository(
-        mockApiService: MockApiService,
-        dateRangeProvider: DateRangeProvider
-    ): FxRatesRepository {
-        return if (BuildConfig.MOCK_API) FakeFxRatesRepository(
-            mockApiService
-        ) else FixerFxRatesRepository(dateRangeProvider)
+    @Singleton
+    fun provideFixerApiService(client: OkHttpClient, callAdapterFactory: FixerCallAdapterFactory): FixerApi {
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.API_BASE_URL)
+            .addCallAdapterFactory(callAdapterFactory)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(FixerApi::class.java)
     }
+
+    @Provides
+    fun provideFxRatesRepository(
+        fixerApi: FixerApi,
+        mockApiService: MockApiService,
+    ): FxRatesRepository {
+        return if (BuildConfig.MOCK_API) {
+            FakeFxRatesRepository(mockApiService)
+        } else {
+            FixerFxRatesRepository(fixerApi)
+        }
+    }
+
 
     @Provides
     fun provideAssetManager(@ApplicationContext context: Context): AssetManager {

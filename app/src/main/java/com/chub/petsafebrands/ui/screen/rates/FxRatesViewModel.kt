@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
 import com.chub.petsafebrands.config.Config.STOP_TIMEOUT_MILLIS
-import com.chub.petsafebrands.di.WorkDispatcher
+import com.chub.petsafebrands.di.qualifiers.WorkDispatcher
 import com.chub.petsafebrands.domain.GetFxRatesUseCase
 import com.chub.petsafebrands.domain.MultiplicationUseCase
 import com.chub.petsafebrands.domain.pojo.Currency
@@ -95,7 +95,7 @@ class FxRatesViewModel @Inject constructor(
         viewModelScope.launch(workDispatcher) {
             isLoading.value = true
             selectedRates.value = emptyList()
-            when (val result = getFxRatesUseCase(currentRate.value.currency)) {
+            when (val result = getFxRatesUseCase(currentRate.value)) {
                 is UiResult.Success -> {
                     result.data?.let {
                         currentRate.value = it.baseRate
