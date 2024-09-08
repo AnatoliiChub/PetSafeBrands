@@ -11,15 +11,18 @@ class FixerFxRatesRepository(
     private val fixerApi: FixerApi,
 ) : FxRatesRepository {
     override suspend fun getRates(base: String, symbols: List<Currency>): Result<DayRateResponse> {
-        return fixerApi.getLatestRates(BuildConfig.API_KEY, base, symbols.joinToString(",") { it.name })
+        return fixerApi.getLatestRates(
+            apiKey = BuildConfig.API_KEY,
+            base = base,
+            symbols = symbols.joinToString(",") { it.name })
     }
 
     override suspend fun getHistoricalRates(request: DailyRatesQuery): Result<DayRateResponse> {
         return fixerApi.getHistoricalRates(
-            BuildConfig.API_KEY,
-            request.date,
-            request.base.currency.name,
-            request.currencies.joinToString(",") { it.name }
+            date = request.date,
+            apiKey = BuildConfig.API_KEY,
+            base = request.base.currency.name,
+            symbols = request.currencies.joinToString(",") { it.name }
         )
     }
 }

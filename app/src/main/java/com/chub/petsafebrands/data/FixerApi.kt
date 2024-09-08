@@ -15,10 +15,10 @@ interface FixerApi {
         @Query("symbols") symbols: String
     ): Result<DayRateResponse>
 
-    @GET("historical/{date}")
+    @GET("{date}")
     suspend fun getHistoricalRates(
-        @Query("access_key") apiKey: String,
         @Path("date") date: String,
+        @Query("access_key") apiKey: String,
         @Query("base") base: String,
         @Query("symbols") symbols: String
     ): Result<DayRateResponse>

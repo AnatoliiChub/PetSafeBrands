@@ -105,7 +105,3 @@ class DescendingSortUseCaseTest {
         assertEquals(BigDecimal("0.85"), sortedList[5].rates.find { it.currency == Currency.EUR }?.value)
     }
 }
-
-fun LocalDate.toDate(): Date {
-    return Date.from(this.atStartOfDay(ZoneId.systemDefault()).toInstant())
-}

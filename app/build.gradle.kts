@@ -35,7 +35,7 @@ android {
         debug {
             buildConfigField("String", "API_KEY", "\"$apiKey\"")
             buildConfigField("String", "API_BASE_URL", "\"https://data.fixer.io/api/\"")
-            buildConfigField("Boolean", "MOCK_API", "true")
+            buildConfigField("Boolean", "MOCK_API", "false")
         }
         release {
             isMinifyEnabled = false
