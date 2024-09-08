@@ -11,8 +11,8 @@ class DateCalculator @Inject constructor() {
     }
 
     fun getDateWithOffset(days: Int): String {
-        val endDate = Date()
-        val startDate = Date(endDate.time - days * 24 * 60 * 60 * 1000)
-        return DATE_FORMAT.format(startDate)
+        val now = Date()
+        val result = Date(now.time - days * 24 * 60 * 60 * 1000)
+        return DATE_FORMAT.format(result)
     }
 }
