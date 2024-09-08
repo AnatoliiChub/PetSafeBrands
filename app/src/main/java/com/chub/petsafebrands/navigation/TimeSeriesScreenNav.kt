@@ -8,6 +8,6 @@ import kotlinx.serialization.Serializable
 @Parcelize
 data class TimeSeriesScreenNav(
     val baseCurrency: Int,
-    val baseAmount: Float,
+    val baseAmount: String,
     val currencies: List<Int>
 ) : Parcelable

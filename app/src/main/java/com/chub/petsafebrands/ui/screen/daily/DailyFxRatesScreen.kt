@@ -26,6 +26,7 @@ import com.chub.petsafebrands.ui.view.CurrencyRateComparisonTable
 import com.chub.petsafebrands.ui.view.ErrorLayout
 import com.chub.petsafebrands.ui.view.LoadingLayout
 import com.chub.petsafebrands.ui.view.TopBar
+import java.math.BigDecimal
 
 @Composable
 fun DailyFxRatesScreen(onBack: () -> Unit, viewModel: DailyFxRatesViewModel = hiltViewModel()) {
@@ -65,14 +66,14 @@ private fun ContentLayout(contentState: DailyRatesContentState, onSortByChanged:
 }
 
 @Composable
-private fun BaseAmountLayout(baseCurrency: Currency, baseAmount: Float) {
+private fun BaseAmountLayout(baseCurrency: Currency, baseAmount: BigDecimal) {
     Text(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp, horizontal = 8.dp),
         text = stringResource(
             R.string.base_amount,
-            baseAmount.toDouble().toMoneyString(),
+            baseAmount.toMoneyString(),
             baseCurrency.name
         ),
         fontWeight = FontWeight.Bold,

@@ -24,15 +24,16 @@ import com.chub.petsafebrands.R
 import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.toMoneyString
+import java.math.BigDecimal
 
 @Composable
 fun CurrencyListItem(
     rate: CurrencyRateItem,
-    selectedRates: List<CurrencyRateItem>,
+    isSelected : Boolean = false,
     onClick: (CurrencyRateItem) -> Unit
 ) {
     Card(modifier = Modifier.padding(horizontal = 8.dp), colors = CardDefaults.cardColors(
-        containerColor = if (selectedRates.firstOrNull { it.currency == rate.currency } != null) {
+        containerColor = if (isSelected) {
             MaterialTheme.colorScheme.primaryContainer
         } else {
             MaterialTheme.colorScheme.surfaceContainer
@@ -65,9 +66,9 @@ fun CurrencyListItemPreview() {
     CurrencyListItem(
         rate = CurrencyRateItem(
             currency = Currency.USD,
-            coefficient = 1.0,
-            value = 12546456587567874636456456434646456457456452.0
+            coefficient = BigDecimal("1.0"),
+            value = BigDecimal("12546456587567874636456456434646456457456452.0")
         ),
-        selectedRates = emptyList()
+        isSelected = false
     ) {}
 }

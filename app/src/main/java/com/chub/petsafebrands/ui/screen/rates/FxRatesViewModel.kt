@@ -3,8 +3,10 @@ package com.chub.petsafebrands.ui.screen.rates
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
+import com.chub.petsafebrands.config.Config.STOP_TIMEOUT_MILLIS
 import com.chub.petsafebrands.di.WorkDispatcher
 import com.chub.petsafebrands.domain.GetFxRatesUseCase
+import com.chub.petsafebrands.domain.MultiplicationUseCase
 import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.domain.pojo.UiResult
@@ -25,7 +27,8 @@ import javax.inject.Inject
 class FxRatesViewModel @Inject constructor(
     @WorkDispatcher
     private val workDispatcher: CoroutineDispatcher,
-    private val getFxRatesUseCase: GetFxRatesUseCase
+    private val getFxRatesUseCase: GetFxRatesUseCase,
+    private val multiplicationUseCase: MultiplicationUseCase
 ) : ViewModel() {
 
     companion object {
@@ -38,11 +41,13 @@ class FxRatesViewModel @Inject constructor(
     private val currentRate = MutableStateFlow(CurrencyRateItem(Currency.EUR))
     private val selectedRates = MutableStateFlow(emptyList<CurrencyRateItem>())
     private val error: MutableStateFlow<ErrorState> = MutableStateFlow(ErrorState.None)
+    private val updatedRates = combine(rates, baseAmount) { rates, baseAmount ->
+        rates.map { rate -> rate.copy(value = multiplicationUseCase(baseAmount, rate.coefficient)) }
+    }
+
     private val contentState = combine(
         currentRate,
-        combine(rates, baseAmount) { rates, baseAmount ->
-            rates.map { rate -> rate.copy(value = rate.coefficient * (baseAmount.toDoubleOrNull() ?: 0.0)) }
-        },
+        updatedRates,
         baseAmount,
         selectedRates
     ) { currentRate, rates, baseAmount, selectedRates ->
@@ -63,7 +68,7 @@ class FxRatesViewModel @Inject constructor(
     }.flowOn(workDispatcher)
         .stateIn(
             viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
+            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
             initialValue = RatesScreenState(
                 isLoading = false,
                 error = ErrorState.None,
@@ -107,8 +112,8 @@ class FxRatesViewModel @Inject constructor(
 
     private fun onRateSelected(action: FxRatesAction.FxRatesSelected) {
         val selectedRates = state.value.contentState.selectedRates.toMutableList()
-        if (selectedRates.contains(action.rate)) {
-            selectedRates.remove(action.rate)
+        if (selectedRates.any { it.currency == action.rate.currency }) {
+            selectedRates.removeIf { it.currency == action.rate.currency }
         } else if (selectedRates.size >= MAX_SELECTED_RATES) {
             selectedRates.removeLast()
             selectedRates.add(action.rate)

@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import com.chub.petsafebrands.R
 import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
+import com.chub.petsafebrands.isValidAmountOfMoney
+import java.math.BigDecimal
 
 @Composable
 fun BaseRateSelectionLayout(
@@ -76,7 +78,7 @@ fun BaseRateSelectionLayout(
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
                 singleLine = true,
                 value = baseAmount,
-                isError = baseAmount.toDoubleOrNull() == null ,
+                isError = !baseAmount.isValidAmountOfMoney(),
                 onValueChange = onAmountChanged
             )
         }
@@ -87,15 +89,15 @@ fun BaseRateSelectionLayout(
 @Composable
 fun BaseRateSelectionLayoutPreview() {
     BaseRateSelectionLayout(
-        baseRate = CurrencyRateItem(Currency.EUR, 1.0),
+        baseRate = CurrencyRateItem(Currency.EUR, BigDecimal.ONE),
         baseAmount = "100.0",
         rates = listOf(
-            CurrencyRateItem(Currency.USD, 1.2),
-            CurrencyRateItem(Currency.GBP, 0.8),
-            CurrencyRateItem(Currency.JPY, 130.0),
-            CurrencyRateItem(Currency.AUD, 1.6),
-            CurrencyRateItem(Currency.CAD, 1.5),
-            CurrencyRateItem(Currency.CHF, 1.1),
+            CurrencyRateItem(Currency.USD, BigDecimal(1.2)),
+            CurrencyRateItem(Currency.GBP, BigDecimal(0.8)),
+            CurrencyRateItem(Currency.JPY, BigDecimal(130.0)),
+            CurrencyRateItem(Currency.AUD, BigDecimal(1.6)),
+            CurrencyRateItem(Currency.CAD, BigDecimal(1.5)),
+            CurrencyRateItem(Currency.CHF, BigDecimal(1.1)),
         ),
         onBaseRateSelected = {},
         onAmountChanged = {}

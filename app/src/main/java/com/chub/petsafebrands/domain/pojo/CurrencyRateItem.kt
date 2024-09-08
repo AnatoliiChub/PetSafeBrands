@@ -1,8 +1,10 @@
 package com.chub.petsafebrands.domain.pojo
 
+import java.math.BigDecimal
+
 data class CurrencyRateItem(
     val currency: Currency,
-    val coefficient: Double = 1.0,
-    val value: Double = 0.0
+    val coefficient: BigDecimal = BigDecimal.ONE,
+    val value: BigDecimal = BigDecimal.ZERO
 )
 

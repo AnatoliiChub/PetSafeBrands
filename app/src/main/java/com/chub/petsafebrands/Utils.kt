@@ -6,6 +6,7 @@ import android.os.Parcelable
 import androidx.navigation.NavType
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.math.BigDecimal
 import java.util.Locale
 
 inline fun <reified T : Parcelable> parcelableType(
@@ -27,4 +28,6 @@ inline fun <reified T : Parcelable> parcelableType(
     override fun put(bundle: Bundle, key: String, value: T) = bundle.putParcelable(key, value)
 }
 
-fun Double.toMoneyString() = String.format(Locale.US, "%.2f", this)
+fun BigDecimal.toMoneyString() = String.format(Locale.US, "%.2f", this)
+
+fun String.isValidAmountOfMoney()  = this.toBigDecimalOrNull() != null

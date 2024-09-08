@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.chub.petsafebrands.config.Config.STOP_TIMEOUT_MILLIS
 import com.chub.petsafebrands.data.RequestDailyRates
 import com.chub.petsafebrands.di.WorkDispatcher
 import com.chub.petsafebrands.domain.DescendingSortUseCase
@@ -11,12 +12,12 @@ import com.chub.petsafebrands.domain.GetDailyRatesUseCase
 import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.domain.pojo.DayFxRate
+import com.chub.petsafebrands.domain.pojo.SortBy
 import com.chub.petsafebrands.domain.pojo.UiResult
 import com.chub.petsafebrands.navigation.TimeSeriesScreenNav
 import com.chub.petsafebrands.ui.screen.ErrorState
 import com.chub.petsafebrands.ui.screen.daily.state.DailyRatesContentState
 import com.chub.petsafebrands.ui.screen.daily.state.DailyRatesScreenState
-import com.chub.petsafebrands.domain.pojo.SortBy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,7 +38,7 @@ class DailyFxRatesViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val baseAmount = MutableStateFlow(0f)
+    private val baseAmount = MutableStateFlow(BigDecimal.ZERO)
     private val baseCurrency = MutableStateFlow(Currency.EUR)
     private val dayRates = MutableStateFlow(emptyList<DayFxRate>())
     private val error: MutableStateFlow<ErrorState> = MutableStateFlow(ErrorState.None)
@@ -53,10 +55,10 @@ class DailyFxRatesViewModel @Inject constructor(
     }.flowOn(workDispatcher)
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
+            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
             initialValue = DailyRatesScreenState(
                 DailyRatesContentState(
-                    baseAmount = 0f,
+                    baseAmount = BigDecimal.ZERO,
                     baseCurrency = Currency.EUR,
                     dayRates = emptyList(),
                     sortBy = SortBy.ByDate
@@ -67,7 +69,7 @@ class DailyFxRatesViewModel @Inject constructor(
 
     init {
         val item = savedStateHandle.toRoute<TimeSeriesScreenNav>()
-        baseAmount.value = item.baseAmount
+        baseAmount.value = BigDecimal(item.baseAmount)
         baseCurrency.value = Currency.entries[item.baseCurrency]
         currencies = item.currencies.map { Currency.entries[it] }
         fetchDailyRates()
@@ -85,7 +87,7 @@ class DailyFxRatesViewModel @Inject constructor(
             isLoading.value = true
             val uiResult = getDailyRatesUseCase(
                 RequestDailyRates(
-                    CurrencyRateItem(baseCurrency.value, value = baseAmount.value.toDouble()),
+                    CurrencyRateItem(baseCurrency.value, value = baseAmount.value),
                     currencies
                 )
             )

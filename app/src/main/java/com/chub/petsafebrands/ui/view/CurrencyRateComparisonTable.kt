@@ -18,6 +18,7 @@ import com.chub.petsafebrands.domain.pojo.DayFxRate
 import com.chub.petsafebrands.domain.toFormattedString
 import com.chub.petsafebrands.toMoneyString
 import com.chub.petsafebrands.domain.pojo.SortBy
+import java.math.BigDecimal
 import java.util.Date
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -56,32 +57,32 @@ fun CurrencyRateComparisonTablePreview() {
         rates = listOf(
             DayFxRate(
                 Date(), listOf(
-                    CurrencyRateItem(Currency.USD, 1.0),
-                    CurrencyRateItem(Currency.JPY, 0.8),
+                    CurrencyRateItem(Currency.USD,  BigDecimal(1.0)),
+                    CurrencyRateItem(Currency.JPY,  BigDecimal(0.8)),
                 )
             ),
             DayFxRate(
                 Date(), listOf(
-                    CurrencyRateItem(Currency.USD, 1.1),
-                    CurrencyRateItem(Currency.JPY, 0.9),
+                    CurrencyRateItem(Currency.USD,  BigDecimal(1.1)),
+                    CurrencyRateItem(Currency.JPY,  BigDecimal(0.9)),
                 )
             ),
             DayFxRate(
                 Date(), listOf(
-                    CurrencyRateItem(Currency.USD, 1.2),
-                    CurrencyRateItem(Currency.JPY, 1.0),
+                    CurrencyRateItem(Currency.USD,  BigDecimal(1.2)),
+                    CurrencyRateItem(Currency.JPY,  BigDecimal(1.0)),
                 )
             ),
             DayFxRate(
                 Date(), listOf(
-                    CurrencyRateItem(Currency.USD, 1.3),
-                    CurrencyRateItem(Currency.JPY, 1.1),
+                    CurrencyRateItem(Currency.USD,  BigDecimal(1.3)),
+                    CurrencyRateItem(Currency.JPY,  BigDecimal(1.1)),
                 )
             ),
             DayFxRate(
                 Date(), listOf(
-                    CurrencyRateItem(Currency.USD, 1.4),
-                    CurrencyRateItem(Currency.JPY, 1.2),
+                    CurrencyRateItem(Currency.USD,  BigDecimal(1.4)),
+                    CurrencyRateItem(Currency.JPY,  BigDecimal(1.2)),
                 )
             ),
         ),

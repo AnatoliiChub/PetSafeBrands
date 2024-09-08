@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chub.petsafebrands.R
 import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
+import com.chub.petsafebrands.isValidAmountOfMoney
 import com.chub.petsafebrands.navigation.TimeSeriesScreenNav
 import com.chub.petsafebrands.ui.screen.ErrorState
 import com.chub.petsafebrands.ui.screen.rates.state.RatesContentState
@@ -35,7 +36,7 @@ fun RatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: 
     val selectedItemsCount = state.value.contentState.selectedRates.size
     val baseAmount = state.value.contentState.baseAmount
     Scaffold(topBar = { TopBar(title = R.string.fx_rates) }, floatingActionButton = {
-        if (selectedItemsCount == MAX_SELECTED_RATES && baseAmount.toDoubleOrNull() != null) {
+        if (selectedItemsCount == MAX_SELECTED_RATES && baseAmount.isValidAmountOfMoney()) {
             TextFloatingButton(text = R.string.show_daily_rates, icon = Icons.Default.Info) {
                 onCurrenciesSelected(provideTimeSeriesScreenNav(state.value))
             }
@@ -81,7 +82,7 @@ private fun ContentLayout(
                 }
             }
             items(rates, key = { it.currency }) { rate ->
-                CurrencyListItem(rate = rate, selectedRates = selectedRates) {
+                CurrencyListItem(rate = rate, isSelected = selectedRates.any { it.currency == rate.currency }) {
                     viewModel.onAction(FxRatesAction.FxRatesSelected(rate))
                 }
             }
@@ -92,7 +93,7 @@ private fun ContentLayout(
 private fun provideTimeSeriesScreenNav(state: RatesScreenState) =
     TimeSeriesScreenNav(
         baseCurrency = state.contentState.currentRate!!.currency.ordinal,
-        baseAmount = state.contentState.baseAmount.toFloatOrNull() ?: 0.0f,
+        baseAmount = state.contentState.baseAmount,
         currencies = listOf(
             state.contentState.selectedRates[0].currency.ordinal,
             state.contentState.selectedRates[1].currency.ordinal

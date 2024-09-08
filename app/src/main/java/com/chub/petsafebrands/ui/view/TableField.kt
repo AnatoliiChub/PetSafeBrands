@@ -3,6 +3,7 @@ package com.chub.petsafebrands.ui.view
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -26,8 +27,7 @@ fun RowScope.TableField(text: String, isSelected: Boolean = false, onClick: () -
     ) {
         Text(
             modifier = Modifier
-                .padding(vertical = 4.dp)
-                .weight(1f),
+                .padding(vertical = 4.dp),
             text = text,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
@@ -36,6 +36,7 @@ fun RowScope.TableField(text: String, isSelected: Boolean = false, onClick: () -
         if (isSelected) {
             Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
         }
+        Spacer(modifier = Modifier.weight(1f))
     }
 
 }

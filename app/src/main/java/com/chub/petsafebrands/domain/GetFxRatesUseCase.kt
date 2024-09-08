@@ -7,6 +7,7 @@ import javax.inject.Inject
 import com.chub.petsafebrands.data.retrofit.Result
 import com.chub.petsafebrands.domain.pojo.FxRates
 import com.chub.petsafebrands.domain.pojo.UiResult
+import java.math.BigDecimal
 
 class GetFxRatesUseCase @Inject constructor(private val repository: FxRatesRepository) {
     suspend operator fun invoke(base: Currency, currencies : List<Currency> = Currency.entries): UiResult<FxRates> {
@@ -15,9 +16,9 @@ class GetFxRatesUseCase @Inject constructor(private val repository: FxRatesRepos
             is Result.Success -> {
                 return UiResult.Success(
                     result.data?.let {
-                        FxRates(baseRate = CurrencyRateItem(currency = base, coefficient = 1.0),
+                        FxRates(baseRate = CurrencyRateItem(currency = base),
                             rates = it.rates.map { (currency, rate) ->
-                                CurrencyRateItem(currency = Currency.valueOf(currency), coefficient = rate.toDouble())
+                                CurrencyRateItem(currency = Currency.valueOf(currency), coefficient = BigDecimal(rate))
                             }
                         )
                     }
