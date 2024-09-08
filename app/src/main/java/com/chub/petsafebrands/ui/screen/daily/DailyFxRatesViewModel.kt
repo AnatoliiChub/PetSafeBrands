@@ -1,10 +1,11 @@
-package com.chub.petsafebrands.ui.screen.tiimeseries
+package com.chub.petsafebrands.ui.screen.daily
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.chub.petsafebrands.data.RequestTimeSeries
+import com.chub.petsafebrands.di.WorkDispatcher
 import com.chub.petsafebrands.domain.DescendingSortUseCase
 import com.chub.petsafebrands.domain.GetDailyRatesUseCase
 import com.chub.petsafebrands.domain.pojo.Currency
@@ -12,8 +13,12 @@ import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.domain.pojo.DayFxRate
 import com.chub.petsafebrands.domain.pojo.UiResult
 import com.chub.petsafebrands.navigation.TimeSeriesScreenNav
+import com.chub.petsafebrands.ui.screen.ErrorState
+import com.chub.petsafebrands.ui.screen.daily.state.DailyRatesContentState
+import com.chub.petsafebrands.ui.screen.daily.state.DailyRatesScreenState
+import com.chub.petsafebrands.ui.screen.daily.state.SortBy
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -24,6 +29,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DailyFxRatesViewModel @Inject constructor(
+    @WorkDispatcher
+    private val workDispatcher: CoroutineDispatcher,
     private val getDailyRatesUseCase: GetDailyRatesUseCase,
     private val descendingSortUseCase: DescendingSortUseCase,
     private val savedStateHandle: SavedStateHandle
@@ -32,7 +39,7 @@ class DailyFxRatesViewModel @Inject constructor(
     private val baseAmount = MutableStateFlow(0f)
     private val baseCurrency = MutableStateFlow(Currency.EUR)
     private val dayRates = MutableStateFlow(emptyList<DayFxRate>())
-    private val error = MutableStateFlow("")
+    private val error: MutableStateFlow<ErrorState> = MutableStateFlow(ErrorState.None)
     private val isLoading = MutableStateFlow(false)
     private val currencies: List<Currency>
     private val sortBy: MutableStateFlow<SortBy> = MutableStateFlow(SortBy.ByDate)
@@ -42,20 +49,20 @@ class DailyFxRatesViewModel @Inject constructor(
     }
 
     val state = combine(contentState, error, isLoading) { contentState, error, isLoading ->
-            DailyRatesScreenState(contentState, error, isLoading)
-        }.flowOn(Dispatchers.Default)
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(),
-                initialValue = DailyRatesScreenState(
-                    DailyRatesContentState(
-                        baseAmount = 0f,
-                        baseCurrency = Currency.EUR,
-                        dayRates = emptyList(),
-                        sortBy = SortBy.ByDate
-                    ), "", false
-                )
+        DailyRatesScreenState(contentState, error, isLoading)
+    }.flowOn(workDispatcher)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = DailyRatesScreenState(
+                DailyRatesContentState(
+                    baseAmount = 0f,
+                    baseCurrency = Currency.EUR,
+                    dayRates = emptyList(),
+                    sortBy = SortBy.ByDate
+                ), ErrorState.None, false
             )
+        )
 
 
     init {
@@ -74,7 +81,7 @@ class DailyFxRatesViewModel @Inject constructor(
     }
 
     private fun fetchDailyRates() {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(workDispatcher) {
             isLoading.value = true
             val uiResult = getDailyRatesUseCase(
                 RequestTimeSeries(
@@ -85,10 +92,10 @@ class DailyFxRatesViewModel @Inject constructor(
             when (uiResult) {
                 is UiResult.Success -> {
                     uiResult.data?.let { dayRates.value = it }
-                    error.value = ""
+                    error.value = ErrorState.None
                 }
 
-                is UiResult.Failure -> error.value = uiResult.errorMessage
+                is UiResult.Failure -> error.value = ErrorState.Error(uiResult.errorMessage)
             }
             isLoading.value = false
         }

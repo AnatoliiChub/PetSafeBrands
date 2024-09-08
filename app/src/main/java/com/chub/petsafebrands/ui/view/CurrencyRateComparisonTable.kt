@@ -17,7 +17,7 @@ import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.domain.pojo.DayFxRate
 import com.chub.petsafebrands.domain.toFormattedString
 import com.chub.petsafebrands.toMoneyString
-import com.chub.petsafebrands.ui.screen.tiimeseries.SortBy
+import com.chub.petsafebrands.ui.screen.daily.state.SortBy
 import java.util.Date
 
 @OptIn(ExperimentalFoundationApi::class)

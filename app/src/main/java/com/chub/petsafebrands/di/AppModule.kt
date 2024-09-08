@@ -17,6 +17,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,7 +26,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class DataModule {
+class AppModule {
 
     @Provides
     @Singleton
@@ -75,5 +77,11 @@ class DataModule {
     @Provides
     fun provideGson(): Gson {
         return Gson()
+    }
+
+    @Provides
+    @WorkDispatcher
+    fun provideWorkDispatcher(): CoroutineDispatcher {
+        return Dispatchers.Default
     }
 }

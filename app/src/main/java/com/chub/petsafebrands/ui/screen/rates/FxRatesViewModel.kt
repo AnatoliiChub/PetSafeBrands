@@ -3,12 +3,16 @@ package com.chub.petsafebrands.ui.screen.rates
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
+import com.chub.petsafebrands.di.WorkDispatcher
 import com.chub.petsafebrands.domain.GetFxRatesUseCase
 import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.domain.pojo.UiResult
+import com.chub.petsafebrands.ui.screen.ErrorState
+import com.chub.petsafebrands.ui.screen.rates.state.RatesContentState
+import com.chub.petsafebrands.ui.screen.rates.state.RatesScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -18,7 +22,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesUseCase) : ViewModel() {
+class FxRatesViewModel @Inject constructor(
+    @WorkDispatcher
+    private val workDispatcher: CoroutineDispatcher,
+    private val getFxRatesUseCase: GetFxRatesUseCase
+) : ViewModel() {
 
     companion object {
         private const val INITIAL_BASE_AMOUNT = "100.0"
@@ -29,7 +37,7 @@ class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesU
     private val rates = MutableStateFlow(emptyList<CurrencyRateItem>())
     private val currentRate = MutableStateFlow(CurrencyRateItem(Currency.EUR))
     private val selectedRates = MutableStateFlow(emptyList<CurrencyRateItem>())
-    private val error = MutableStateFlow("")
+    private val error: MutableStateFlow<ErrorState> = MutableStateFlow(ErrorState.None)
     private val contentState = combine(
         currentRate,
         combine(rates, baseAmount) { rates, baseAmount ->
@@ -52,58 +60,52 @@ class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesU
         contentState
     ) { isLoading, error, contentState ->
         RatesScreenState(isLoading = isLoading, error = error, contentState = contentState)
-    }.flowOn(Dispatchers.Default)
+    }.flowOn(workDispatcher)
         .stateIn(
             viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = RatesScreenState(isLoading = false, error = "", contentState = RatesContentState())
+            initialValue = RatesScreenState(
+                isLoading = false,
+                error = ErrorState.None,
+                contentState = RatesContentState()
+            )
         )
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            fetchRates(Currency.EUR)
-        }
+        fetchRates()
     }
 
-    fun onAction(action: RateScreenAction) {
+    fun onAction(action: FxRatesAction) {
         when (action) {
-            is RateScreenAction.BaseCurrencyChanged -> onBaseCurrencyChanged(action)
-            is RateScreenAction.RateSelected -> onRateSelected(action)
-            is RateScreenAction.FetchRates -> fetchRates()
-            is RateScreenAction.BaseAmountChanged -> {
+            is FxRatesAction.BaseCurrencyChanged -> onBaseCurrencyChanged(action)
+            is FxRatesAction.FxRatesSelected -> onRateSelected(action)
+            is FxRatesAction.FetchRates -> fetchRates()
+            is FxRatesAction.BaseAmountChanged -> {
                 baseAmount.value = action.amount
             }
         }
     }
 
     private fun fetchRates() {
-        viewModelScope.launch(Dispatchers.IO) {
-            fetchRates(currentRate.value.currency)
-        }
-    }
-
-    private suspend fun fetchRates(currency: Currency) {
-        isLoading.value = true
-        selectedRates.value = emptyList()
-        when (val result = getFxRatesUseCase(currency)) {
-            is UiResult.Success -> {
-                result.data?.let {
-                    currentRate.value = it.baseRate
-                    rates.value = it.rates
-                    error.value = ""
+        viewModelScope.launch(workDispatcher) {
+            isLoading.value = true
+            selectedRates.value = emptyList()
+            when (val result = getFxRatesUseCase(currentRate.value.currency)) {
+                is UiResult.Success -> {
+                    result.data?.let {
+                        currentRate.value = it.baseRate
+                        rates.value = it.rates
+                        error.value = ErrorState.None
+                    }
                 }
 
+                is UiResult.Failure -> error.value = ErrorState.Error(result.errorMessage)
             }
-
-            is UiResult.Failure -> error.value = result.errorMessage
+            isLoading.value = false
         }
-        isLoading.value = false
     }
 
-    private fun onRateSelected(action: RateScreenAction.RateSelected) {
-        if (baseAmount.value.toDoubleOrNull() == null) {
-            return
-        }
+    private fun onRateSelected(action: FxRatesAction.FxRatesSelected) {
         val selectedRates = state.value.contentState.selectedRates.toMutableList()
         if (selectedRates.contains(action.rate)) {
             selectedRates.remove(action.rate)
@@ -116,10 +118,8 @@ class RateScreenViewModel @Inject constructor(val getFxRatesUseCase: GetFxRatesU
         this.selectedRates.value = selectedRates
     }
 
-    private fun onBaseCurrencyChanged(action: RateScreenAction.BaseCurrencyChanged) {
+    private fun onBaseCurrencyChanged(action: FxRatesAction.BaseCurrencyChanged) {
         currentRate.value = action.rate
-        viewModelScope.launch(Dispatchers.IO) {
-            fetchRates(action.rate.currency)
-        }
+        fetchRates()
     }
 }

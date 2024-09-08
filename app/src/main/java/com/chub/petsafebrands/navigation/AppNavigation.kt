@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.chub.petsafebrands.parcelableType
 import com.chub.petsafebrands.ui.screen.rates.RatesScreen
-import com.chub.petsafebrands.ui.screen.tiimeseries.DailyFxRatesScreen
+import com.chub.petsafebrands.ui.screen.daily.DailyFxRatesScreen
 import kotlin.reflect.typeOf
 
 @Composable

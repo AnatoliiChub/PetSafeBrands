@@ -2,7 +2,7 @@
     <string name="app_name">PetSafeBrands</string>
     <string name="fx_rates">FX Rates</string>
     <string name="fx_rates_history">FX Rates History</string>
-    <string name="show_details">Show Details</string>
+    <string name="show_daily_rates">Show daily rates</string>
     <string name="amount">Amount</string>
     <string name="try_again">Try again</string>
     <string name="date">Date :</string>

@@ -19,6 +19,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chub.petsafebrands.R
 import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
 import com.chub.petsafebrands.navigation.TimeSeriesScreenNav
+import com.chub.petsafebrands.ui.screen.ErrorState
+import com.chub.petsafebrands.ui.screen.rates.state.RatesContentState
+import com.chub.petsafebrands.ui.screen.rates.state.RatesScreenState
 import com.chub.petsafebrands.ui.view.BaseRateSelectionLayout
 import com.chub.petsafebrands.ui.view.CurrencyListItem
 import com.chub.petsafebrands.ui.view.ErrorLayout
@@ -27,13 +30,13 @@ import com.chub.petsafebrands.ui.view.TextFloatingButton
 import com.chub.petsafebrands.ui.view.TopBar
 
 @Composable
-fun RatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: RateScreenViewModel = hiltViewModel()) {
+fun RatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: FxRatesViewModel = hiltViewModel()) {
     val state = viewModel.state.collectAsStateWithLifecycle()
     val selectedItemsCount = state.value.contentState.selectedRates.size
     val baseAmount = state.value.contentState.baseAmount
     Scaffold(topBar = { TopBar(title = R.string.fx_rates) }, floatingActionButton = {
         if (selectedItemsCount == MAX_SELECTED_RATES && baseAmount.toDoubleOrNull() != null) {
-            TextFloatingButton(text = R.string.show_details, icon = Icons.Default.Info) {
+            TextFloatingButton(text = R.string.show_daily_rates, icon = Icons.Default.Info) {
                 onCurrenciesSelected(provideTimeSeriesScreenNav(state.value))
             }
         }
@@ -44,10 +47,11 @@ fun RatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: 
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            if (state.value.error.isNotEmpty()) {
-                ErrorLayout(state.value.error) { viewModel.onAction(RateScreenAction.FetchRates) }
+            val error = state.value.error
+            if (error is ErrorState.Error) {
+                ErrorLayout(error.message) { viewModel.onAction(FxRatesAction.FetchRates) }
             } else {
-                Content(viewModel, state.value.contentState)
+                ContentLayout(viewModel, state.value.contentState)
             }
             if (state.value.isLoading) {
                 LoadingLayout()
@@ -58,8 +62,8 @@ fun RatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: 
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun Content(
-    viewModel: RateScreenViewModel,
+private fun ContentLayout(
+    viewModel: FxRatesViewModel,
     state: RatesContentState
 ) {
     with(state) {
@@ -71,14 +75,14 @@ private fun Content(
                     BaseRateSelectionLayout(baseRate = currentRate,
                         baseAmount,
                         rates = rates,
-                        { viewModel.onAction(RateScreenAction.BaseCurrencyChanged(it)) },
-                        { viewModel.onAction(RateScreenAction.BaseAmountChanged(it)) }
+                        { viewModel.onAction(FxRatesAction.BaseCurrencyChanged(it)) },
+                        { viewModel.onAction(FxRatesAction.BaseAmountChanged(it)) }
                     )
                 }
             }
             items(rates, key = { it.currency }) { rate ->
                 CurrencyListItem(rate = rate, selectedRates = selectedRates) {
-                    viewModel.onAction(RateScreenAction.RateSelected(rate))
+                    viewModel.onAction(FxRatesAction.FxRatesSelected(rate))
                 }
             }
         }

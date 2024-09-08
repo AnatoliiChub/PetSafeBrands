@@ -32,7 +32,7 @@ fun CurrencyListItem(
     onClick: (CurrencyRateItem) -> Unit
 ) {
     Card(modifier = Modifier.padding(horizontal = 8.dp), colors = CardDefaults.cardColors(
-        containerColor = if (selectedRates.contains(rate)) {
+        containerColor = if (selectedRates.firstOrNull { it.currency == rate.currency } != null) {
             MaterialTheme.colorScheme.primaryContainer
         } else {
             MaterialTheme.colorScheme.surfaceContainer

@@ -1,4 +1,4 @@
-package com.chub.petsafebrands.ui.screen.tiimeseries
+package com.chub.petsafebrands.ui.screen.daily
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +19,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chub.petsafebrands.R
 import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.toMoneyString
+import com.chub.petsafebrands.ui.screen.ErrorState
+import com.chub.petsafebrands.ui.screen.daily.state.DailyRatesContentState
+import com.chub.petsafebrands.ui.screen.daily.state.SortBy
 import com.chub.petsafebrands.ui.view.CurrencyRateComparisonTable
 import com.chub.petsafebrands.ui.view.ErrorLayout
 import com.chub.petsafebrands.ui.view.LoadingLayout
@@ -36,19 +39,10 @@ fun DailyFxRatesScreen(onBack: () -> Unit, viewModel: DailyFxRatesViewModel = hi
                 .padding(innerPadding), contentAlignment = Alignment.Center
         ) {
             with(state.value) {
-                if (errorMessage.isNotEmpty()) {
-                    ErrorLayout(errorMessage) {
-                        viewModel.onAction(DailyFxRatesAction.FetchDailyRates)
-                    }
+                if (error is ErrorState.Error) {
+                    ErrorLayout(error.message) { viewModel.onAction(DailyFxRatesAction.FetchDailyRates) }
                 } else {
-                    Column(Modifier.fillMaxSize()) {
-                        BaseAmountLayout(contentState.baseCurrency, contentState.baseAmount)
-                        if (contentState.dayRates.isNotEmpty()) {
-                            CurrencyRateComparisonTable(rates = contentState.dayRates, sortBy = contentState.sortBy) {
-                                viewModel.onAction(DailyFxRatesAction.SortByChanged(it))
-                            }
-                        }
-                    }
+                    ContentLayout(contentState) { viewModel.onAction(DailyFxRatesAction.SortByChanged(it)) }
                 }
             }
             if (state.value.isLoading) {
@@ -59,11 +53,23 @@ fun DailyFxRatesScreen(onBack: () -> Unit, viewModel: DailyFxRatesViewModel = hi
 }
 
 @Composable
+private fun ContentLayout(contentState: DailyRatesContentState, onSortByChanged: (SortBy) -> Unit) {
+    Column(Modifier.fillMaxSize()) {
+        BaseAmountLayout(contentState.baseCurrency, contentState.baseAmount)
+        if (contentState.dayRates.isNotEmpty()) {
+            CurrencyRateComparisonTable(rates = contentState.dayRates, sortBy = contentState.sortBy) {
+                onSortByChanged(it)
+            }
+        }
+    }
+}
+
+@Composable
 private fun BaseAmountLayout(baseCurrency: Currency, baseAmount: Float) {
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(vertical = 16.dp, horizontal = 8.dp),
         text = stringResource(
             R.string.base_amount,
             baseAmount.toDouble().toMoneyString(),

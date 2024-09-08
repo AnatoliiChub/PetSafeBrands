@@ -27,5 +27,5 @@ fun TextFloatingButton(@StringRes text: Int, icon: ImageVector, onClick: () -> U
 @Preview
 @Composable
 fun TextFloatingButtonPreview() {
-    TextFloatingButton(text = R.string.show_details, icon = Icons.Filled.Info) {}
+    TextFloatingButton(text = R.string.show_daily_rates, icon = Icons.Filled.Info) {}
 }

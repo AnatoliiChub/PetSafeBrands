@@ -73,7 +73,7 @@ fun BaseRateSelectionLayout(
             TextField(
                 modifier = Modifier.width(160.dp),
                 label = { Text(text = stringResource(R.string.amount)) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
                 singleLine = true,
                 value = baseAmount,
                 isError = baseAmount.toDoubleOrNull() == null ,
