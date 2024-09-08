@@ -23,7 +23,7 @@ import com.chub.petsafebrands.navigation.TimeSeriesScreenNav
 import com.chub.petsafebrands.ui.screen.ErrorState
 import com.chub.petsafebrands.ui.screen.rates.state.RatesContentState
 import com.chub.petsafebrands.ui.screen.rates.state.RatesScreenState
-import com.chub.petsafebrands.ui.view.BaseRateSelectionLayout
+import com.chub.petsafebrands.ui.view.CurrencyHeader
 import com.chub.petsafebrands.ui.view.CurrencyListItem
 import com.chub.petsafebrands.ui.view.ErrorLayout
 import com.chub.petsafebrands.ui.view.LoadingLayout
@@ -73,12 +73,9 @@ private fun ContentLayout(
         ) {
             stickyHeader {
                 currentRate?.let {
-                    BaseRateSelectionLayout(baseRate = currentRate,
-                        baseAmount,
-                        rates = rates,
-                        { viewModel.onAction(FxRatesAction.BaseCurrencyChanged(it)) },
-                        { viewModel.onAction(FxRatesAction.BaseAmountChanged(it)) }
-                    )
+                    CurrencyHeader(baseRate = currentRate, baseAmount) {
+                        viewModel.onAction(FxRatesAction.BaseAmountChanged(it))
+                    }
                 }
             }
             items(rates, key = { it.currency }) { rate ->

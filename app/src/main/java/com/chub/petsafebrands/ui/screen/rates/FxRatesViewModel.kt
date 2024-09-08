@@ -35,10 +35,11 @@ class FxRatesViewModel @Inject constructor(
         private const val INITIAL_BASE_AMOUNT = "100.0"
     }
 
+    private val currentRateItem = CurrencyRateItem(Currency.EUR)
+
     private val baseAmount = MutableStateFlow(INITIAL_BASE_AMOUNT)
     private val isLoading = MutableStateFlow(false)
     private val rates = MutableStateFlow(emptyList<CurrencyRateItem>())
-    private val currentRate = MutableStateFlow(CurrencyRateItem(Currency.EUR))
     private val selectedRates = MutableStateFlow(emptyList<CurrencyRateItem>())
     private val error: MutableStateFlow<ErrorState> = MutableStateFlow(ErrorState.None)
     private val updatedRates = combine(rates, baseAmount) { rates, baseAmount ->
@@ -46,14 +47,13 @@ class FxRatesViewModel @Inject constructor(
     }
 
     private val contentState = combine(
-        currentRate,
         updatedRates,
         baseAmount,
         selectedRates
-    ) { currentRate, rates, baseAmount, selectedRates ->
+    ) { rates, baseAmount, selectedRates ->
         RatesContentState(
             baseAmount = baseAmount,
-            currentRate = currentRate,
+            currentRate = currentRateItem,
             rates = rates,
             selectedRates = selectedRates
         )
@@ -82,7 +82,6 @@ class FxRatesViewModel @Inject constructor(
 
     fun onAction(action: FxRatesAction) {
         when (action) {
-            is FxRatesAction.BaseCurrencyChanged -> onBaseCurrencyChanged(action)
             is FxRatesAction.FxRatesSelected -> onRateSelected(action)
             is FxRatesAction.FetchRates -> fetchRates()
             is FxRatesAction.BaseAmountChanged -> {
@@ -95,10 +94,9 @@ class FxRatesViewModel @Inject constructor(
         viewModelScope.launch(workDispatcher) {
             isLoading.value = true
             selectedRates.value = emptyList()
-            when (val result = getFxRatesUseCase(currentRate.value)) {
+            when (val result = getFxRatesUseCase(currentRateItem)) {
                 is UiResult.Success -> {
                     result.data?.let {
-                        currentRate.value = it.baseRate
                         rates.value = it.rates
                         error.value = ErrorState.None
                     }
@@ -121,10 +119,5 @@ class FxRatesViewModel @Inject constructor(
             selectedRates.add(action.rate)
         }
         this.selectedRates.value = selectedRates
-    }
-
-    private fun onBaseCurrencyChanged(action: FxRatesAction.BaseCurrencyChanged) {
-        currentRate.value = action.rate
-        fetchRates()
     }
 }
