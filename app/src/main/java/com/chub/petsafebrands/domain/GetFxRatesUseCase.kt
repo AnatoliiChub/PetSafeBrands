@@ -1,6 +1,6 @@
 package com.chub.petsafebrands.domain
 
-import com.chub.petsafebrands.data.FxRatesRepository
+import com.chub.petsafebrands.data.repo.FxRatesRepository
 import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import javax.inject.Inject
@@ -9,9 +9,9 @@ import com.chub.petsafebrands.domain.pojo.FxRates
 import com.chub.petsafebrands.domain.pojo.UiResult
 
 class GetFxRatesUseCase @Inject constructor(private val repository: FxRatesRepository) {
-    suspend operator fun invoke(base: Currency): UiResult<FxRates> {
+    suspend operator fun invoke(base: Currency, currencies : List<Currency> = Currency.entries): UiResult<FxRates> {
 
-        return when (val result = repository.getRates(base.name)) {
+        return when (val result = repository.getRates(base.name, currencies)) {
             is Result.Success -> {
                 return UiResult.Success(
                     result.data?.let {

@@ -27,11 +27,12 @@ class FakeResponseInterceptor @Inject constructor(private val jsonReader: JsonRe
         }
         val responseString = jsonReader.getJsonAsString(file)
 
-        return chain.proceed(chain.request())
-            .newBuilder()
-            .code(if (IS_ERROR_RESPONSE) ERROR_CODE else SUCCESS_CODE)
-            .message(responseString)
-            .body(responseString.toByteArray().toResponseBody("application/json".toMediaTypeOrNull()))
-            .addHeader("content-type", "application/json").build()
+        return chain.proceed(chain.request()).use {
+            it.newBuilder()
+                .code(if (IS_ERROR_RESPONSE) ERROR_CODE else SUCCESS_CODE)
+                .message(responseString)
+                .body(responseString.toByteArray().toResponseBody("application/json".toMediaTypeOrNull()))
+                .addHeader("content-type", "application/json").build()
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.chub.petsafebrands.data.response
 
 
-data class TimeSeriesResponse(
+data class DailyRatesResponse(
     val success: Boolean,
     val timeseries: Boolean,
     val start_date: String,

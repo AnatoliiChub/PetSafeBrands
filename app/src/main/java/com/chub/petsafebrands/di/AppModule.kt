@@ -4,12 +4,12 @@ import android.content.Context
 import android.content.res.AssetManager
 import com.chub.petsafebrands.BuildConfig
 import com.chub.petsafebrands.data.DateRangeProvider
-import com.chub.petsafebrands.data.FixerFxRatesRepository
-import com.chub.petsafebrands.data.FxRatesRepository
 import com.chub.petsafebrands.data.debug.FakeFxRatesRepository
 import com.chub.petsafebrands.data.debug.FakeResponseInterceptor
 import com.chub.petsafebrands.data.debug.JsonReader
 import com.chub.petsafebrands.data.debug.MockApiService
+import com.chub.petsafebrands.data.repo.FixerFxRatesRepository
+import com.chub.petsafebrands.data.repo.FxRatesRepository
 import com.chub.petsafebrands.data.retrofit.FixerCallAdapterFactory
 import com.google.gson.Gson
 import dagger.Module
@@ -22,7 +22,9 @@ import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.logging.Logger
 import javax.inject.Singleton
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -66,7 +68,7 @@ class AppModule {
         dateRangeProvider: DateRangeProvider
     ): FxRatesRepository {
         return if (BuildConfig.MOCK_API) FakeFxRatesRepository(
-            mockApiService, dateRangeProvider
+            mockApiService
         ) else FixerFxRatesRepository(dateRangeProvider)
     }
 

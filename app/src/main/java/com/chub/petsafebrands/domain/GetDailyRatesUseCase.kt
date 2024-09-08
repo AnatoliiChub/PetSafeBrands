@@ -1,7 +1,7 @@
 package com.chub.petsafebrands.domain
 
-import com.chub.petsafebrands.data.FxRatesRepository
-import com.chub.petsafebrands.data.RequestTimeSeries
+import com.chub.petsafebrands.data.repo.FxRatesRepository
+import com.chub.petsafebrands.data.RequestDailyRates
 import com.chub.petsafebrands.data.retrofit.Result
 import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
@@ -14,7 +14,7 @@ class GetDailyRatesUseCase @Inject constructor(
     private val dateParser: DateParser
 ) {
 
-    suspend operator fun invoke(request: RequestTimeSeries): UiResult<List<DayFxRate>> {
+    suspend operator fun invoke(request: RequestDailyRates): UiResult<List<DayFxRate>> {
         val baseAmount = request.base.value
         return when (val result = repository.getDailyRates(request)) {
             is Result.Success -> {

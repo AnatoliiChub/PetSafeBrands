@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.chub.petsafebrands.data.RequestTimeSeries
+import com.chub.petsafebrands.data.RequestDailyRates
 import com.chub.petsafebrands.di.WorkDispatcher
 import com.chub.petsafebrands.domain.DescendingSortUseCase
 import com.chub.petsafebrands.domain.GetDailyRatesUseCase
@@ -84,7 +84,7 @@ class DailyFxRatesViewModel @Inject constructor(
         viewModelScope.launch(workDispatcher) {
             isLoading.value = true
             val uiResult = getDailyRatesUseCase(
-                RequestTimeSeries(
+                RequestDailyRates(
                     CurrencyRateItem(baseCurrency.value, value = baseAmount.value.toDouble()),
                     currencies
                 )

@@ -1,11 +1,14 @@
-package com.chub.petsafebrands.data
+package com.chub.petsafebrands.data.repo
 
+import com.chub.petsafebrands.data.DateRangeProvider
+import com.chub.petsafebrands.data.RequestDailyRates
+import com.chub.petsafebrands.data.response.DailyRatesResponse
 import com.chub.petsafebrands.data.response.ExchangeRatesResponse
-import com.chub.petsafebrands.data.response.TimeSeriesResponse
 import com.chub.petsafebrands.data.retrofit.Result
+import com.chub.petsafebrands.domain.pojo.Currency
 
 class FixerFxRatesRepository(private val dateRangeProvider: DateRangeProvider) : FxRatesRepository {
-    override suspend fun getRates(base: String): Result<ExchangeRatesResponse> {
+    override suspend fun getRates(base: String, symbols: List<Currency>): Result<ExchangeRatesResponse> {
         // TODO: Implement real API call
         return Result.Success(
             ExchangeRatesResponse(
@@ -23,10 +26,10 @@ class FixerFxRatesRepository(private val dateRangeProvider: DateRangeProvider) :
         )
     }
 
-    override suspend fun getDailyRates(request: RequestTimeSeries): Result<TimeSeriesResponse> {
+    override suspend fun getDailyRates(request: RequestDailyRates): Result<DailyRatesResponse> {
         // TODO: Implement real API call
         return Result.Success(
-            TimeSeriesResponse(
+            DailyRatesResponse(
                 success = true,
                 timeseries = true,
                 base = request.base.currency.name,
