@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.chub.petsafebrands.config.Config.MAX_SELECTED_RATES
 import com.chub.petsafebrands.config.Config.STOP_TIMEOUT_MILLIS
 import com.chub.petsafebrands.di.qualifiers.WorkDispatcher
-import com.chub.petsafebrands.domain.GetFxRatesUseCase
-import com.chub.petsafebrands.domain.MultiplicationUseCase
+import com.chub.petsafebrands.domain.usecases.GetFxRatesUseCase
+import com.chub.petsafebrands.domain.usecases.MultiplicationUseCase
 import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.domain.pojo.UiResult

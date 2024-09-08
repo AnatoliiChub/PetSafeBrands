@@ -1,5 +1,6 @@
 package com.chub.petsafebrands.domain
 
+import com.chub.petsafebrands.domain.usecases.MultiplicationUseCase
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Assertions

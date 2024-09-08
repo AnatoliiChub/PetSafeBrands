@@ -4,6 +4,7 @@ import com.chub.petsafebrands.data.response.DayRateResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 import com.chub.petsafebrands.data.retrofit.Result
+import retrofit2.http.Path
 
 interface FixerApi {
 
@@ -14,11 +15,10 @@ interface FixerApi {
         @Query("symbols") symbols: String
     ): Result<DayRateResponse>
 
-    @GET("timeseries")
-    suspend fun getTimeSeriesRates(
+    @GET("historical/{date}")
+    suspend fun getHistoricalRates(
         @Query("access_key") apiKey: String,
-        @Query("start_date") startDate: String,
-        @Query("end_date") endDate: String,
+        @Path("date") date: String,
         @Query("base") base: String,
         @Query("symbols") symbols: String
     ): Result<DayRateResponse>

@@ -1,4 +1,4 @@
-package com.chub.petsafebrands.domain
+package com.chub.petsafebrands.domain.usecases
 
 import com.chub.petsafebrands.isValidAmountOfMoney
 import java.math.BigDecimal

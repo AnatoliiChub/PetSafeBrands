@@ -11,11 +11,15 @@ class FixerFxRatesRepository(
     private val fixerApi: FixerApi,
 ) : FxRatesRepository {
     override suspend fun getRates(base: String, symbols: List<Currency>): Result<DayRateResponse> {
-        val r = fixerApi.getLatestRates(BuildConfig.API_KEY, base, symbols.joinToString(",") { it.name })
-        return r
+        return fixerApi.getLatestRates(BuildConfig.API_KEY, base, symbols.joinToString(",") { it.name })
     }
 
     override suspend fun getHistoricalRates(request: DailyRatesQuery): Result<DayRateResponse> {
-        return Result.Failure(111,"Not implemented")
+        return fixerApi.getHistoricalRates(
+            BuildConfig.API_KEY,
+            request.date,
+            request.base.currency.name,
+            request.currencies.joinToString(",") { it.name }
+        )
     }
 }

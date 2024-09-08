@@ -44,11 +44,14 @@ class AppModule {
             if (BuildConfig.MOCK_API) {
                 this.addInterceptor(fakeResponseInterceptor)
             } else {
+                val loggingInterceptor = okhttp3.logging.HttpLoggingInterceptor()
+                loggingInterceptor.level = okhttp3.logging.HttpLoggingInterceptor.Level.BODY
                 val host = "data.fixer.io"
                 val pin = "sha256/4q3CllWNIW9XcXbtJFQCHjSrnqH8Wak0jbwMhRkGP0U="
                 val pinner = okhttp3.CertificatePinner.Builder().add(host, pin).build()
                 this.connectionSpecs(listOf(okhttp3.ConnectionSpec.MODERN_TLS))
                     .certificatePinner(pinner)
+                    .addInterceptor(loggingInterceptor)
             }
         }.build()
     }
@@ -88,7 +91,6 @@ class AppModule {
             FixerFxRatesRepository(fixerApi)
         }
     }
-
 
     @Provides
     fun provideAssetManager(@ApplicationContext context: Context): AssetManager {

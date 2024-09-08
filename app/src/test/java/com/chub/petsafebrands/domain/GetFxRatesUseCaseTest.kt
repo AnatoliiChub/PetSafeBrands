@@ -7,6 +7,7 @@ import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.domain.pojo.FxRates
 import com.chub.petsafebrands.domain.pojo.UiResult
+import com.chub.petsafebrands.domain.usecases.GetFxRatesUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions

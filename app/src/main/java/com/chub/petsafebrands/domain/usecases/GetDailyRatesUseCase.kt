@@ -1,11 +1,14 @@
-package com.chub.petsafebrands.domain
+package com.chub.petsafebrands.domain.usecases
 
 import com.chub.petsafebrands.data.repo.FxRatesRepository
 import com.chub.petsafebrands.data.retrofit.Result
+import com.chub.petsafebrands.domain.DateCalculator
+import com.chub.petsafebrands.domain.DayRateResponseConverter
 import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.domain.pojo.DailyRatesQuery
 import com.chub.petsafebrands.domain.pojo.DayFxRate
+import com.chub.petsafebrands.domain.pojo.FixerApiException
 import com.chub.petsafebrands.domain.pojo.UiResult
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

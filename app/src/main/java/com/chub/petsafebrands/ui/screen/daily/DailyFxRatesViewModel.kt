@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.chub.petsafebrands.config.Config.STOP_TIMEOUT_MILLIS
 import com.chub.petsafebrands.di.qualifiers.WorkDispatcher
-import com.chub.petsafebrands.domain.DescendingSortUseCase
-import com.chub.petsafebrands.domain.GetDailyRatesUseCase
+import com.chub.petsafebrands.domain.usecases.DescendingSortUseCase
+import com.chub.petsafebrands.domain.usecases.GetDailyRatesUseCase
 import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.domain.pojo.DayFxRate

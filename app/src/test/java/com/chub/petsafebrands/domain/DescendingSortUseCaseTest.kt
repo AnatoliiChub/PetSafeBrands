@@ -4,6 +4,7 @@ import com.chub.petsafebrands.domain.pojo.Currency
 import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.domain.pojo.DayFxRate
 import com.chub.petsafebrands.domain.pojo.SortBy
+import com.chub.petsafebrands.domain.usecases.DescendingSortUseCase
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
