@@ -3,6 +3,7 @@ package com.chub.petsafebrands.di
 import android.content.Context
 import android.content.res.AssetManager
 import com.chub.petsafebrands.BuildConfig
+import com.chub.petsafebrands.config.DebugConfig
 import com.chub.petsafebrands.data.DateRangeProvider
 import com.chub.petsafebrands.data.debug.FakeFxRatesRepository
 import com.chub.petsafebrands.data.debug.FakeResponseInterceptor
@@ -38,10 +39,15 @@ class AppModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(fakeResponseInterceptor: FakeResponseInterceptor): OkHttpClient {
-        // TODO: IMPLEMENT TLS PINING
         return OkHttpClient.Builder().apply {
             if (BuildConfig.MOCK_API) {
                 this.addInterceptor(fakeResponseInterceptor)
+            } else {
+                val host = "data.fixer.io"
+                val pin = "sha256/4q3CllWNIW9XcXbtJFQCHjSrnqH8Wak0jbwMhRkGP0U="
+                val pinner = okhttp3.CertificatePinner.Builder().add(host, pin).build()
+                this.connectionSpecs(listOf(okhttp3.ConnectionSpec.MODERN_TLS))
+                    .certificatePinner(pinner)
             }
         }.build()
     }
@@ -49,9 +55,7 @@ class AppModule {
     @Provides
     @Singleton
     fun provideMockApiService(client: OkHttpClient, callAdapterFactory: FixerCallAdapterFactory): MockApiService {
-        //just to avoid additional connection to fixer api since amount of available requests is limited
-        //I used stackoverflow as a host for mock api.
-        val url = if (BuildConfig.MOCK_API) "https://stackoverflow.com/" else BuildConfig.API_BASE_URL
+        val url = if (BuildConfig.MOCK_API) DebugConfig.BASE_URL else BuildConfig.API_BASE_URL
         return Retrofit.Builder()
             .baseUrl(url)
             .addCallAdapterFactory(callAdapterFactory)

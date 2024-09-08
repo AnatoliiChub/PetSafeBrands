@@ -27,14 +27,12 @@ android {
 
     buildTypes {
         debug {
-            // TODO: Change this to fixer api
-            buildConfigField("String", "API_BASE_URL", "\"https://stackoverflow.com/\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://data.fixer.io/api/\"")
             buildConfigField("Boolean", "MOCK_API", "true")
         }
         release {
             isMinifyEnabled = false
-            // TODO: Change this to fixer api
-            buildConfigField("String", "API_BASE_URL", "\"https://stackoverflow.com/\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://data.fixer.io/api/\"")
             buildConfigField("Boolean", "MOCK_API", "false")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
