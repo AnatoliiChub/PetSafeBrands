@@ -16,7 +16,7 @@ composeBom = "2024.08.00"
 kotlinKsp = "2.0.20-1.0.25"
 hiltVersion = "2.50"
 hiltNavigationCompose = "1.2.0"
-retrofit = "2.9.0"
+retrofit = "2.11.0"
 okhttp3 = "4.12.0"
 
 [libraries]
