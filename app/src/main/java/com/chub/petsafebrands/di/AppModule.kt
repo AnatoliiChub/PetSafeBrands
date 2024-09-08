@@ -49,6 +49,7 @@ class AppModule {
     @Singleton
     fun provideMockApiService(client: OkHttpClient, callAdapterFactory: FixerCallAdapterFactory): MockApiService {
         //just to avoid additional connection to fixer api since amount of available requests is limited
+        //I used stackoverflow as a host for mock api.
         val url = if (BuildConfig.MOCK_API) "https://stackoverflow.com/" else BuildConfig.API_BASE_URL
         return Retrofit.Builder()
             .baseUrl(url)
