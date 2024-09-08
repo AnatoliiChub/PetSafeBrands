@@ -24,12 +24,12 @@ class GetDailyRatesUseCase @Inject constructor(
                             date = dateParser.parse(date),
                             rates = rates.map { (currency, rate) ->
                                 val coefficient = rate.toDouble()
-                                val item = CurrencyRateItem(
+                                CurrencyRateItem(
                                     currency = Currency.valueOf(currency),
                                     coefficient = coefficient,
                                     value = baseAmount * coefficient
                                 )
-                                return@map item
+
                             }.sortedBy { it.currency })
                     }?.sortedByDescending { it.date } ?: emptyList()
                 )
