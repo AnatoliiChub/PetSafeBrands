@@ -1,25 +1,25 @@
-# PetSafeBrands
-**PetSafeBrands Assessment task**
+# FX Rates App
+**PetSafe Brands Assessment task**
 
 ## Table of Contents
-- [Features]
-- [Build]
-- [Technologies and Architecture]
-  - [Overview]
-  - [Project Structure]
-  - [MVVM Architecture]
-  - [Networking]
-  - [Debug Mode]
-- [Challenges]
-- [UI/UX]
-  - [General UI State]
-  - [FX Rates Screen]
-  - [Daily FX Rates Screen]
-  - [Video Demo]
+- [Features](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop#features)
+- [Build](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop#build)
+- [Technologies and Architecture](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#technologies-and-architecture)
+  - [Overview](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#overview)
+  - [Project Structure](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#project-structure)
+  - [MVVM Architecture](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#mvvm-architecture)
+  - [Networking](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#networking)
+  - [Debug Mode](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#debug-mode)
+- [Challenges](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#challenges)
+- [UI/UX](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#uiux)
+  - [General UI State](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#general-ui-state)
+  - [FX Rates Screen](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#fx-rates-screen)
+  - [Daily FX Rates Screen](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#daily-fx-rates-screen)
+  - [Video Demo](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#video-demo)
+
 ## Features
 - Fetch foreign exchange rates from a remote API.
 - Sort exchange rates by date or currency.
-- Display exchange rates in a user-friendly interface.
 - Debug Mode.
 
 ## Build
