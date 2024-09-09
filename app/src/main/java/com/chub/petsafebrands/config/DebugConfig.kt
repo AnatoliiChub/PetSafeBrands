@@ -1,5 +1,8 @@
 package com.chub.petsafebrands.config
 
+/**
+ * It's not extracted to separate flavor because it's not a real project and I don't want to overcomplicate it.
+ */
 object DebugConfig {
     //just to avoid additional connection to fixer api since amount of available requests is limited
     //I used google.com as a host for mock api to avoid Bad gateway error (502).
