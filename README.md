@@ -76,8 +76,8 @@ But, **please note** that all the data in this case are hardcoded and can be inc
 
 ## Challenges
 Since I've used the free tier of Fixer api, I should say a couple words regarding my solution.
-Fixer api has ["timeseries"](https://fixer.io/documentation#timeseries) api which is very suitable for the Daily Fix Rates screen. But Since it's not available in a free package, I was not able to use it.
-Instead of this, I've used another one whis is available: [historical](https://fixer.io/documentation#historicalrates) api.
+Fixer api has ["timeseries"](https://fixer.io/documentation#timeseries) api which is very suitable for the Daily Fix Rates screen. But, since it's not available in a free package, I was not able to use it.
+Instead of this, I've used another one which is available: [historical](https://fixer.io/documentation#historicalrates) api.
 It's not so suitable because it provides a currency rate only for the concrete date, So to receive all the data for 5 days, it should make 5 requests.
 I've implemented it asynchronously, so it's not time consuming.
 As I understood it was a part of the challenge.
@@ -86,7 +86,7 @@ As I understood it was a part of the challenge.
 The project uses Jetpack Compose for the UI layer, which is a modern toolkit for building native Android UI., it allows to make components reusable. I've extracted all ui components to the ```package com.chub.petsafebrands.ui.view```
 
 ### General UI State
-I've Implemented general ui state for both screens. It includes Loading and Error states.
+I've Implemented general ui state for both screens. It includes **Loading** and **Error** states.
 During fetching the data it displays a loading layout over the screen.
 Error layout contains an error message and a "Try again" button.
 <div align="center">
