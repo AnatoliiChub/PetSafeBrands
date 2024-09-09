@@ -61,6 +61,7 @@ I've implemented SSL pinning for security reasons. It helps prevent man-in-the-m
 
 ### Debug Mode
 Since the amount of free requests to Fixer API is very limited, I've implemented a ```FakeFxRatesRepository``` which returns json stored in the assets folder.
+I have not extracted it to debug's flavor since it's not a real project.
 You can switch to the debug mode by changing MOCK_API field to true in the app gradle file:  
 ```buildConfigField("Boolean", "MOCK_API", "false")```
 ```
