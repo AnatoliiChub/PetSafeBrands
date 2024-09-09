@@ -35,13 +35,16 @@ fun RatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: 
     val state = viewModel.state.collectAsStateWithLifecycle()
     val selectedItemsCount = state.value.contentState.selectedRates.size
     val baseAmount = state.value.contentState.baseAmount
-    Scaffold(topBar = { TopBar(title = R.string.fx_rates) }, floatingActionButton = {
-        if (selectedItemsCount == MAX_SELECTED_RATES && baseAmount.isValidAmountOfMoney()) {
-            TextFloatingButton(text = R.string.show_daily_rates, icon = Icons.Default.Info) {
-                onCurrenciesSelected(provideTimeSeriesScreenNav(state.value))
+    Scaffold(
+        topBar = { TopBar(title = R.string.fx_rates) },
+        floatingActionButton = {
+            if (selectedItemsCount == MAX_SELECTED_RATES && baseAmount.isValidAmountOfMoney()) {
+                TextFloatingButton(text = R.string.show_daily_rates, icon = Icons.Default.Info) {
+                    onCurrenciesSelected(provideTimeSeriesScreenNav(state.value))
+                }
             }
-        }
-    }, floatingActionButtonPosition = FabPosition.Center
+        },
+        floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         Box(
             Modifier
@@ -96,7 +99,3 @@ private fun provideTimeSeriesScreenNav(state: RatesScreenState) =
             state.contentState.selectedRates[1].currency.ordinal
         )
     )
-
-
-
-
