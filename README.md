@@ -23,18 +23,21 @@
 - Debug Mode.
 
 ## Build
-To build the app you need to provide your access key. You should add it to the local.properties file in the root folder.
-```API_KEY=YOUR_FIXER_KEY```
+To build the app you need to provide your Fixer Api access key. You should add it to the ```local.properties``` file in the root folder.
+
+```API_KEY=YOUR_FIXER_API_KEY```
+
 Or you can put it directly to app build file, See this field in debug and release build variant:
+
 ```      buildConfigField("String", "API_KEY", "\"$apiKey\"")```
 
-Change it to ```buildConfigField("String", "API_KEY", "YOUR_API_KEY")```
+Change it to ```buildConfigField("String", "API_KEY", "YOUR_FIXER_API_KEY")```
 
 ## Technologies and Architecture
 
 ### Overview
 I used a modern stack of technologies: **Jetpack Compose, Kotlin Coroutines, Kotlin Flow, Retrofit and Hilt**.
-I prefer to use **Hilt** for dependency injection because it can provide compile-time safety(in comparison with Koin it's an advantage), it supports **Jetpack Compose** and has full integration with Android. Also I have a lot of experience with Dagger 2, since Hilt is based on Dagger 2, it's also an advantage for me. Since I have a **Mock API** in the app it's a good option to set up configuration for different ```BuildConfig```'s.
+I prefer to use **Hilt** for dependency injection because it can provide compile-time safety(in comparison with Koin it's an advantage), it supports **Jetpack Compose** and has full integration with Android. Also I have a lot of experience with Dagger 2, since Hilt is based on Dagger 2, it's also an advantage for me. Since I have a [Debug Mode](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#debug-mode) in the app it's a good option to set up configuration for different ```BuildConfig```'s.
 Despite having a lot of experience with RxJava I used Kotlin coroutines and Flow because in my opinion the RxJava framework has a chance to become deprecated or not maintainable in the next few years.
 
 ### Project Structure
@@ -46,7 +49,7 @@ Despite having a lot of experience with RxJava I used Kotlin coroutines and Flow
 
 ### MVVM Architecture
 I've used MVVM architecture for the app. Since Viewmodel does not have any reference to View it will be easy to test it.
-I tried to follow 2 key princiiples.
+I tried to follow 2 key principles.
 - **State Management**: The ViewModel has only one public field responsible for the state, which is typically a `StateFlow` object(single source of truth).
 - **Event Handling**: The ViewModel has only one public method for consuming events, ensuring a unidirectional data flow [Unidirectional data flow](https://developer.android.com/develop/ui/compose/architecture#udf-compose) pattern. This method processes user actions and updates the state accordingly.
 I've used use cases to extract and structurize business logic.
@@ -67,7 +70,7 @@ You can switch to the debug mode by changing MOCK_API field to true in the app g
             buildConfigField("Boolean", "MOCK_API", "false")   // change to true for debug mode
         }
 ```
-But, **please note** that all the data in this case are hardcoded and can be inconsistent. For example **historical** api always returns  rates for the same day.(See **Challenges** for more information)
+But, **please note** that all the data in this case are hardcoded and can be inconsistent. For example **historical** api always returns  rates for the same day.(See [Challenges](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#challenges) for more information regarding the historical api)
 
 ## Challenges
 Since I've used the free tier of Fixer api, I should say a couple words regarding my solution.
