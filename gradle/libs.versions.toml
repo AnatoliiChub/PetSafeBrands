@@ -10,6 +10,7 @@ espressoCore = "3.6.1"
 kotlinxSerializationJson = "1.7.1"
 lifecycleRuntimeKtx = "2.8.5"
 mockitoCore = "5.13.0"
+mockk = "1.13.12"
 navigationCompose = "2.8.0"
 activityCompose = "1.9.2"
 composeBom = "2024.08.00"
@@ -34,6 +35,7 @@ hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-p
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltVersion" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "kotlinKsp" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }

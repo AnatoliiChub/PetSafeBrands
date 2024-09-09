@@ -8,25 +8,26 @@ import com.chub.petsafebrands.domain.pojo.CurrencyRateItem
 import com.chub.petsafebrands.domain.pojo.FxRates
 import com.chub.petsafebrands.domain.pojo.UiResult
 import com.chub.petsafebrands.domain.usecases.GetFxRatesUseCase
+import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
+import io.mockk.coEvery
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
 import java.math.BigDecimal
 
 class GetFxRatesUseCaseTest {
 
+    @MockK
     private lateinit var repository: FxRatesRepository
     private lateinit var getFxRatesUseCase: GetFxRatesUseCase
-    private var annotationsClosable: AutoCloseable? = null
 
     @BeforeEach
     fun setUp() {
-        annotationsClosable = MockitoAnnotations.openMocks(this)
-        repository = Mockito.mock(FxRatesRepository::class.java)
+        MockKAnnotations.init(this)
         getFxRatesUseCase = GetFxRatesUseCase(repository)
     }
 
@@ -53,8 +54,9 @@ class GetFxRatesUseCaseTest {
             error = null
         )
 
-        Mockito.`when`(repository.getRates(baseCurrency.currency.name, currencies))
-            .thenReturn(Result.Success(exchangeRateResponse))
+        coEvery { repository.getRates(baseCurrency.currency.name, currencies) } returns Result.Success(
+            exchangeRateResponse
+        )
 
         val result = getFxRatesUseCase(baseCurrency, currencies)
 
@@ -68,8 +70,10 @@ class GetFxRatesUseCaseTest {
         val currencies = listOf(Currency.EUR, Currency.GBP, Currency.JPY)
         val errorMessage = "Error fetching rates"
 
-        Mockito.`when`(repository.getRates(baseCurrency.currency.name, currencies))
-            .thenReturn(Result.Failure(401, errorMessage))
+        coEvery { repository.getRates(baseCurrency.currency.name, currencies) } returns Result.Failure(
+            401,
+            errorMessage
+        )
 
         val result = getFxRatesUseCase(baseCurrency, currencies)
 
@@ -82,7 +86,7 @@ class GetFxRatesUseCaseTest {
         val baseCurrency = CurrencyRateItem(currency = Currency.USD, coefficient = BigDecimal.ONE)
         val currencies = listOf(Currency.EUR, Currency.GBP, Currency.JPY)
 
-        Mockito.`when`(repository.getRates(baseCurrency.currency.name, currencies)).thenReturn(Result.NetworkError)
+        coEvery { repository.getRates(baseCurrency.currency.name, currencies) } returns Result.NetworkError
 
         val result = getFxRatesUseCase(baseCurrency, currencies)
 
@@ -92,6 +96,6 @@ class GetFxRatesUseCaseTest {
 
     @AfterEach
     fun tearDown() {
-        annotationsClosable?.close()
+        clearAllMocks()
     }
 }
