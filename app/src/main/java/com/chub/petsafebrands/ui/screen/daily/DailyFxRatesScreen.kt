@@ -18,10 +18,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chub.petsafebrands.R
 import com.chub.petsafebrands.domain.pojo.Currency
+import com.chub.petsafebrands.domain.pojo.SortBy
 import com.chub.petsafebrands.toMoneyString
 import com.chub.petsafebrands.ui.screen.ErrorState
 import com.chub.petsafebrands.ui.screen.daily.state.DailyRatesContentState
-import com.chub.petsafebrands.domain.pojo.SortBy
 import com.chub.petsafebrands.ui.view.CurrencyRateComparisonTable
 import com.chub.petsafebrands.ui.view.ErrorLayout
 import com.chub.petsafebrands.ui.view.LoadingLayout
@@ -45,9 +45,9 @@ fun DailyFxRatesScreen(onBack: () -> Unit, viewModel: DailyFxRatesViewModel = hi
                 } else {
                     ContentLayout(contentState) { viewModel.onAction(DailyFxRatesAction.SortByChanged(it)) }
                 }
-            }
-            if (state.value.isLoading) {
-                LoadingLayout()
+                if (isLoading) {
+                    LoadingLayout()
+                }
             }
         }
     }

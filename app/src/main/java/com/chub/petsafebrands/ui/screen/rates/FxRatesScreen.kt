@@ -31,7 +31,7 @@ import com.chub.petsafebrands.ui.view.TextFloatingButton
 import com.chub.petsafebrands.ui.view.TopBar
 
 @Composable
-fun RatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: FxRatesViewModel = hiltViewModel()) {
+fun FxRatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: FxRatesViewModel = hiltViewModel()) {
     val state = viewModel.state.collectAsStateWithLifecycle()
     val selectedItemsCount = state.value.contentState.selectedRates.size
     val baseAmount = state.value.contentState.baseAmount
@@ -49,16 +49,17 @@ fun RatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: 
         Box(
             Modifier
                 .padding(innerPadding)
-                .fillMaxSize()
-        ) {
-            val error = state.value.error
-            if (error is ErrorState.Error) {
-                ErrorLayout(error.message) { viewModel.onAction(FxRatesAction.FetchRates) }
-            } else {
-                ContentLayout(viewModel, state.value.contentState)
-            }
-            if (state.value.isLoading) {
-                LoadingLayout()
+                .fillMaxSize()) {
+            with(state.value) {
+                val error = error
+                if (error is ErrorState.Error) {
+                    ErrorLayout(error.message) { viewModel.onAction(FxRatesAction.FetchRates) }
+                } else {
+                    ContentLayout(viewModel, contentState)
+                }
+                if (isLoading) {
+                    LoadingLayout()
+                }
             }
         }
     }
@@ -66,36 +67,29 @@ fun RatesScreen(onCurrenciesSelected: (TimeSeriesScreenNav) -> Unit, viewModel: 
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun ContentLayout(
-    viewModel: FxRatesViewModel,
-    state: RatesContentState
-) {
-    with(state) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            stickyHeader {
-                currentRate?.let {
-                    CurrencyHeader(baseRate = currentRate, baseAmount) {
-                        viewModel.onAction(FxRatesAction.BaseAmountChanged(it))
-                    }
+private fun ContentLayout(viewModel: FxRatesViewModel, state: RatesContentState) = with(state) {
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        stickyHeader {
+            currentRate?.let {
+                CurrencyHeader(baseRate = currentRate, baseAmount) {
+                    viewModel.onAction(FxRatesAction.BaseAmountChanged(it))
                 }
             }
-            items(rates, key = { it.currency }) { rate ->
-                CurrencyListItem(rate = rate, isSelected = selectedRates.any { it.currency == rate.currency }) {
-                    viewModel.onAction(FxRatesAction.FxRatesSelected(rate))
-                }
+        }
+        items(rates, key = { it.currency }) { rate ->
+            CurrencyListItem(rate = rate, isSelected = selectedRates.any { it.currency == rate.currency }) {
+                viewModel.onAction(FxRatesAction.FxRatesSelected(rate))
             }
         }
     }
 }
 
-private fun provideTimeSeriesScreenNav(state: RatesScreenState) =
+
+private fun provideTimeSeriesScreenNav(state: RatesScreenState) = with(state.contentState) {
     TimeSeriesScreenNav(
-        baseCurrency = state.contentState.currentRate!!.currency.ordinal,
-        baseAmount = state.contentState.baseAmount,
-        currencies = listOf(
-            state.contentState.selectedRates[0].currency.ordinal,
-            state.contentState.selectedRates[1].currency.ordinal
-        )
+        baseCurrency = currentRate!!.currency.ordinal,
+        baseAmount = baseAmount,
+        currencies = listOf(selectedRates[0].currency.ordinal, selectedRates[1].currency.ordinal)
     )
+}
+
