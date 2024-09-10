@@ -23,15 +23,21 @@
 - Debug Mode.
 
 ## Build
+After pulling the project, during the first build you can get the error:
+
+```p.getProperty("API_KEY") must not be null```
+
 To build the app you need to provide your Fixer Api access key. You should add it to the ```local.properties``` file in the root folder.
 
-```API_KEY=YOUR_FIXER_API_KEY```
+```API_KEY=YOUR_FIXER_API_KEY  // just put your access key value instead of YOUR_FIXER_API_KEY, don't use quotes symbols.```
 
 Or you can put it directly to app build file, See this field in debug and release build variant:
 
-```      buildConfigField("String", "API_KEY", "\"$apiKey\"")```
+```buildConfigField("String", "API_KEY", "\"$apiKey\"")```
 
 Change it to ```buildConfigField("String", "API_KEY", "YOUR_FIXER_API_KEY")```
+
+If you want just to sync the project you can put any value for ```API_KEY``` in the ```local.properties``` file.
 
 ## Technologies and Architecture
 
@@ -71,7 +77,7 @@ You can switch to the debug mode by changing MOCK_API field to true in the app g
             buildConfigField("Boolean", "MOCK_API", "false")   // change to true for debug mode
         }
 ```
-But, **please note** that all the data in this case are hardcoded and can be inconsistent. For example **historical** api always returns  rates for the same day.(See [Challenges](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#challenges) for more information regarding the historical api)
+But, **please note** that all the data in this case are hardcoded and can be inconsistent. For example **historical** api always returns  rates for the same day.(See [Challenges](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#challenges) for more information regarding the historical api). So on the second screen in Debug Mode, you will see 5 identical items.
 
 ## Challenges
 Since I've used the free tier of Fixer api, I should say a couple words regarding my solution.
