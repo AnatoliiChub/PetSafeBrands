@@ -4,19 +4,19 @@
 ## Table of Contents
 - [Features](https://github.com/AnatoliiChub/PetSafeBrands#features)
 - [Build](https://github.com/AnatoliiChub/PetSafeBrands#build)
-- [Technologies and Architecture](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#technologies-and-architecture)
-  - [Overview](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#overview)
-  - [Project Structure](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#project-structure)
-  - [MVVM Architecture](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#mvvm-architecture)
-  - [Networking](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#networking)
-  - [Debug Mode](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#debug-mode)
-  - [Testing](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#testing)
-- [Challenges](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#challenges)
-- [UI/UX](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#uiux)
-  - [General UI State](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#general-ui-state)
-  - [FX Rates Screen](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#fx-rates-screen)
-  - [Daily FX Rates Screen](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#daily-fx-rates-screen)
-  - [Video Demo](https://github.com/AnatoliiChub/PetSafeBrands?tab=readme-ov-file#video-demo)
+- [Technologies and Architecture](https://github.com/AnatoliiChub/PetSafeBrands#technologies-and-architecture)
+  - [Overview](https://github.com/AnatoliiChub/PetSafeBrands#overview)
+  - [Project Structure](https://github.com/AnatoliiChub/PetSafeBrands#project-structure)
+  - [MVVM Architecture](https://github.com/AnatoliiChub/PetSafeBrands#mvvm-architecture)
+  - [Networking](https://github.com/AnatoliiChub/PetSafeBrands#networking)
+  - [Debug Mode](https://github.com/AnatoliiChub/PetSafeBrands#debug-mode)
+  - [Testing](https://github.com/AnatoliiChub/PetSafeBrands#testing)
+- [Challenges](https://github.com/AnatoliiChub/PetSafeBrands#challenges)
+- [UI/UX](https://github.com/AnatoliiChub/PetSafeBrands#uiux)
+  - [General UI State](https://github.com/AnatoliiChub/PetSafeBrands#general-ui-state)
+  - [FX Rates Screen](https://github.com/AnatoliiChub/PetSafeBrands#fx-rates-screen)
+  - [Daily FX Rates Screen](https://github.com/AnatoliiChub/PetSafeBrands#daily-fx-rates-screen)
+  - [Video Demo](https://github.com/AnatoliiChub/PetSafeBrands#video-demo)
 
 ## Features
 - Fetch foreign exchange rates from a remote API.
@@ -44,9 +44,9 @@ If you want just to sync the project you can put any value for ```API_KEY``` in 
 
 ### Overview
 I used a modern stack of technologies: **Jetpack Compose, Kotlin Coroutines, Kotlin Flow, Retrofit and Hilt**.
-I prefer to use **Hilt** for dependency injection because it can provide compile-time safety(in comparison with Koin it's an advantage), it supports **Jetpack Compose** and has full integration with Android. Also I have a lot of experience with Dagger 2, since Hilt is based on Dagger 2, it's also an advantage for me. Since I have a [Debug Mode](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#debug-mode) in the app it's a good option to set up configuration for different ```BuildConfig```'s.
+I prefer to use **Hilt** for dependency injection because it can provide compile-time safety(in comparison with Koin it's an advantage), it supports **Jetpack Compose** and has full integration with Android. Also I have a lot of experience with Dagger 2, since Hilt is based on Dagger 2, it's also an advantage for me. Since I have a [Debug Mode](https://github.com/AnatoliiChub/PetSafeBrands#debug-mode) in the app it's a good option to set up configuration for different ```BuildConfig```'s.
 Despite having a lot of experience with RxJava I used Kotlin coroutines and Flow because in my opinion the RxJava framework has a chance to become deprecated or not maintainable in the next few years.
-I've used use cases to extract and structurize business logic.
+I've used use cases to extract and structure business logic.
 
 ### Project Structure
 - `domain`: Contains the business logic and pojo's.
@@ -77,7 +77,7 @@ You can switch to the debug mode by changing MOCK_API field to true in the app g
             buildConfigField("Boolean", "MOCK_API", "false")   // change to true for debug mode
         }
 ```
-But, **please note** that all the data in this case are hardcoded and can be inconsistent. For example **historical** api always returns  rates for the same day.(See [Challenges](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#challenges) for more information regarding the historical api). So on the second screen in **Debug Mode**, you will see 5 identical items(USD and CAD rates for 08/09/2024).
+But, **please note** that all the data in this case are hardcoded and can be inconsistent. For example **historical** api always returns  rates for the same day.(See [Challenges](https://github.com/AnatoliiChub/PetSafeBrands#challenges) for more information regarding the historical api). So on the second screen in **Debug Mode**, you will see 5 identical items(USD and CAD rates for 08/09/2024).
 
 ### Testing
 I've used **Junit 5** for testing and **Mockk** to mock dependencies. I've written unit tests for a few use cases. I did not write UI tests and did not cover all the cases, probably it's overhead for the testing task.
