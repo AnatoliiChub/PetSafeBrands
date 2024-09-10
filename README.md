@@ -10,6 +10,7 @@
   - [MVVM Architecture](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#mvvm-architecture)
   - [Networking](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#networking)
   - [Debug Mode](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#debug-mode)
+  - [Testing](https://github.com/AnatoliiChub/PetSafeBrands/edit/main/README.md#testing)
 - [Challenges](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#challenges)
 - [UI/UX](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#uiux)
   - [General UI State](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#general-ui-state)
@@ -46,7 +47,6 @@ I used a modern stack of technologies: **Jetpack Compose, Kotlin Coroutines, Kot
 I prefer to use **Hilt** for dependency injection because it can provide compile-time safety(in comparison with Koin it's an advantage), it supports **Jetpack Compose** and has full integration with Android. Also I have a lot of experience with Dagger 2, since Hilt is based on Dagger 2, it's also an advantage for me. Since I have a [Debug Mode](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#debug-mode) in the app it's a good option to set up configuration for different ```BuildConfig```'s.
 Despite having a lot of experience with RxJava I used Kotlin coroutines and Flow because in my opinion the RxJava framework has a chance to become deprecated or not maintainable in the next few years.
 I've used use cases to extract and structurize business logic.
-I've used Junit 5 for testing and Mockito to mock dependencies. I've written unit tests for a few use cases.
 
 ### Project Structure
 - `domain`: Contains the business logic and pojo's.
@@ -78,6 +78,9 @@ You can switch to the debug mode by changing MOCK_API field to true in the app g
         }
 ```
 But, **please note** that all the data in this case are hardcoded and can be inconsistent. For example **historical** api always returns  rates for the same day.(See [Challenges](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#challenges) for more information regarding the historical api). So on the second screen in **Debug Mode**, you will see 5 identical items(USD and CAD rates for 08/09/2024).
+
+### Testing
+I've used **Junit 5** for testing and **Mockk** to mock dependencies. I've written unit tests for a few use cases. I did not write UI tests and did not cover all the cases, probably it's overhead for the testing task.
 
 ## Challenges
 Since I've used the free tier of Fixer api, I should say a couple words regarding my solution.
@@ -114,8 +117,8 @@ Pay attention, if the amount field is invalid, the button does not appear even i
 </div>
 
 ### Daily FX Rates Screen
-The screen also contains base currency information on the top. Below the information you can see a table.
-Since on the mockup each title field contains a drop down icon, I made it sortable. By default iit sorted by date in descending order.
+The screen also contains base currency information on the top. Below the currency information you can see a table.
+Since on the mockup each title field contains a drop down icon, I've made it **sortable**. By default it's sorted by date in descending order.
 But the user is able to sort by any other column in descending order. To sort it, just click on the column name.
 Top bar contains "back" icon to navigate to the previous screen
 <div align="center">
