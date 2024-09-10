@@ -77,7 +77,7 @@ You can switch to the debug mode by changing MOCK_API field to true in the app g
             buildConfigField("Boolean", "MOCK_API", "false")   // change to true for debug mode
         }
 ```
-But, **please note** that all the data in this case are hardcoded and can be inconsistent. For example **historical** api always returns  rates for the same day.(See [Challenges](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#challenges) for more information regarding the historical api). So on the second screen in Debug Mode, you will see 5 identical items.
+But, **please note** that all the data in this case are hardcoded and can be inconsistent. For example **historical** api always returns  rates for the same day.(See [Challenges](https://github.com/AnatoliiChub/PetSafeBrands/tree/develop?tab=readme-ov-file#challenges) for more information regarding the historical api). So on the second screen in **Debug Mode**, you will see 5 identical items(USD and CAD rates for 08/09/2024).
 
 ## Challenges
 Since I've used the free tier of Fixer api, I should say a couple words regarding my solution.
